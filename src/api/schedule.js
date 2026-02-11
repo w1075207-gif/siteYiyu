@@ -36,5 +36,8 @@ export async function deleteSchedule(id) {
   const res = await fetch(`${API_BASE}/api/schedule/${encodeURIComponent(id)}`, {
     method: 'DELETE',
   });
-  if (!res.ok) throw new Error('Failed to delete');
+  // 204 No Content has no body; treat as success
+  if (res.status === 204 || res.ok) return;
+  const err = await res.json().catch(() => ({}));
+  throw new Error(err.error || '删除失败');
 }

@@ -4,6 +4,9 @@ node_modules/
 # Build output
 dist/
 
+# SQLite DB (generated at runtime; seed from data/schedule.json if needed)
+data/*.db
+
 # Env and local
 .env
 .env.local

@@ -80,6 +80,16 @@ sudo systemctl reload apache2
 
 Node 仍由 `yiyusite.service` 在 3000 端口运行。
 
+## HTTPS（Let's Encrypt）
+
+域名已配置为 **yiyuwang.be**（含 www）。确保 DNS 的 A 记录已指向本机且已生效后，在服务器上执行：
+
+```bash
+sudo certbot --apache -d yiyuwang.be -d www.yiyuwang.be --non-interactive --agree-tos --email 你的邮箱@example.com
+```
+
+首次可先测试：`curl -I http://yiyuwang.be` 能访问再跑上述命令。证书会自动续期。
+
 ## 服务管理
 
 ```bash
@@ -100,8 +110,16 @@ sudo systemctl restart apache2
 | `deploy/apache-yiyu-80.conf` | Apache 站点：80 → 3000 |
 | `deploy/apache-yiyu-8090.conf` | Apache 站点：8090 → 3000 |
 
+## 数据持久化
+
+计划数据使用 **SQLite**（[sql.js](https://sql.js.org/)）持久化，数据库文件为 `data/site.db`（运行时生成，已加入 `.gitignore`）。
+
+- 首次启动时若存在 `data/schedule.json` 且库为空，会自动导入为初始数据。
+- 备份：直接复制 `data/site.db` 即可。
+
 ## 技术栈
 
 - 前端：React、Ant Design、Vite
 - 后端：Express
+- 数据库：SQLite（sql.js）
 - 生产：Node +（可选）Apache 反向代理

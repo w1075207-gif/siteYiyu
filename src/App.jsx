@@ -51,15 +51,23 @@ export default function App() {
   }
 
   const { profile, schedule } = data;
+  const [scheduleRefreshing, setScheduleRefreshing] = useState(false);
 
   const refreshSchedule = () => {
-    fetchProfile().then(setData).catch(() => message.error('刷新失败'));
+    setScheduleRefreshing(true);
+    return fetchProfile()
+      .then(setData)
+      .finally(() => setScheduleRefreshing(false));
   };
 
   return (
     <>
       <HeroCard profile={profile} onRefresh={handleRefresh} />
-      <ScheduleCard schedule={schedule} onScheduleChange={refreshSchedule} />
+      <ScheduleCard
+        schedule={schedule}
+        onScheduleChange={refreshSchedule}
+        refreshing={scheduleRefreshing}
+      />
       <div style={{ textAlign: 'center', fontSize: 16, color: 'rgba(255,255,255,0.5)' }}>
         数据加载完成
       </div>

@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
-const fs = require("fs");
+const { initDb } = require("./db");
+
 const app = express();
 // When behind Apache: PORT=3000, bind 127.0.0.1. Standalone: PORT=8090, bind all.
 const PORT = process.env.PORT || 8090;
@@ -29,37 +30,18 @@ const profile = {
   ]
 };
 
-const schedulePath = path.join(__dirname, "data", "schedule.json");
-
-function readSchedule() {
-  try {
-    const raw = fs.readFileSync(schedulePath, "utf8");
-    const list = JSON.parse(raw);
-    return Array.isArray(list) ? list : [];
-  } catch (err) {
-    return [];
-  }
-}
-
-function writeSchedule(list) {
-  const dir = path.dirname(schedulePath);
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(schedulePath, JSON.stringify(list, null, 2), "utf8");
-}
-
-function nextId() {
-  return "s" + Date.now() + "-" + Math.random().toString(36).slice(2, 8);
-}
+let scheduleDb = null;
 
 app.use(express.json());
 
 app.get("/api/profile", (req, res) => {
-  const schedule = readSchedule();
+  const schedule = scheduleDb ? scheduleDb.getSchedule() : [];
   res.json({ profile, schedule });
 });
 
 app.get("/api/schedule", (req, res) => {
-  res.json(readSchedule());
+  const schedule = scheduleDb ? scheduleDb.getSchedule() : [];
+  res.json(schedule);
 });
 
 app.post("/api/schedule", (req, res) => {
@@ -67,39 +49,26 @@ app.post("/api/schedule", (req, res) => {
   if (!date || !title) {
     return res.status(400).json({ error: "date and title required" });
   }
-  const list = readSchedule();
-  const item = {
-    id: nextId(),
-    date: String(date).trim(),
-    title: String(title).trim(),
-    note: String(note ?? "").trim()
-  };
-  list.push(item);
-  writeSchedule(list);
+  if (!scheduleDb) return res.status(503).json({ error: "database not ready" });
+  const item = scheduleDb.createSchedule({ date, title, note });
   res.status(201).json(item);
 });
 
 app.put("/api/schedule/:id", (req, res) => {
   const id = req.params.id;
   const { date, title, note } = req.body || {};
-  const list = readSchedule();
-  const idx = list.findIndex((x) => x.id === id);
-  if (idx === -1) return res.status(404).json({ error: "not found" });
-  if (date !== undefined) list[idx].date = String(date).trim();
-  if (title !== undefined) list[idx].title = String(title).trim();
-  if (note !== undefined) list[idx].note = String(note).trim();
-  writeSchedule(list);
-  res.json(list[idx]);
+  if (!scheduleDb) return res.status(503).json({ error: "database not ready" });
+  const item = scheduleDb.updateSchedule(id, { date, title, note });
+  if (!item) return res.status(404).json({ error: "not found" });
+  res.json(item);
 });
 
 app.delete("/api/schedule/:id", (req, res) => {
   const id = req.params.id;
-  const list = readSchedule();
-  const idx = list.findIndex((x) => x.id === id);
-  if (idx === -1) return res.status(404).json({ error: "not found" });
-  list.splice(idx, 1);
-  writeSchedule(list);
-  res.status(204).end();
+  if (!scheduleDb) return res.status(503).json({ error: "database not ready" });
+  const ok = scheduleDb.deleteSchedule(id);
+  if (!ok) return res.status(404).json({ error: "not found" });
+  res.status(200).json({ ok: true });
 });
 
 // Production: serve React build from dist
@@ -116,6 +85,14 @@ app.use((req, res) => {
   });
 });
 
-app.listen(PORT, HOST, () => {
-  console.log(`Personal site running on http://${HOST}:${PORT}`);
-});
+initDb()
+  .then((db) => {
+    scheduleDb = db;
+    app.listen(PORT, HOST, () => {
+      console.log(`Personal site running on http://${HOST}:${PORT} (SQLite)`);
+    });
+  })
+  .catch((err) => {
+    console.error("DB init failed:", err);
+    process.exit(1);
+  });
