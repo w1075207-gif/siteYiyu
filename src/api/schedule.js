@@ -33,11 +33,17 @@ export async function updateSchedule(id, item) {
 }
 
 export async function deleteSchedule(id) {
-  const res = await fetch(`${API_BASE}/api/schedule/${encodeURIComponent(id)}`, {
-    method: 'DELETE',
-  });
-  // 204 No Content has no body; treat as success
-  if (res.status === 204 || res.ok) return;
+  let res;
+  try {
+    res = await fetch(`${API_BASE}/api/schedule/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
+  } catch (e) {
+    throw new Error('网络错误，请刷新页面查看是否已删除');
+  }
+  if (res.status >= 200 && res.status < 300) return;
+  // 404 can mean "already deleted" (e.g. proxy/race); treat as success so UI doesn't show "failed"
+  if (res.status === 404) return;
   const err = await res.json().catch(() => ({}));
   throw new Error(err.error || '删除失败');
 }
