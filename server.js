@@ -1,7 +1,9 @@
 const express = require("express");
 const path = require("path");
 const app = express();
+// When behind Apache: PORT=3000, bind 127.0.0.1. Standalone: PORT=8090, bind all.
 const PORT = process.env.PORT || 8090;
+const HOST = process.env.HOST || (PORT === 8090 ? "0.0.0.0" : "127.0.0.1");
 
 const profile = {
   name: "YiyuBot 的空间",
@@ -47,6 +49,6 @@ app.use((req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Personal site running on http://localhost:${PORT}`);
+app.listen(PORT, HOST, () => {
+  console.log(`Personal site running on http://${HOST}:${PORT}`);
 });
