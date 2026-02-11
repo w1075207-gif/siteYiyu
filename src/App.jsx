@@ -52,10 +52,14 @@ export default function App() {
 
   const { profile, schedule } = data;
 
+  const refreshSchedule = () => {
+    fetchProfile().then(setData).catch(() => message.error('刷新失败'));
+  };
+
   return (
     <>
       <HeroCard profile={profile} onRefresh={handleRefresh} />
-      <ScheduleCard schedule={schedule} />
+      <ScheduleCard schedule={schedule} onScheduleChange={refreshSchedule} />
       <div style={{ textAlign: 'center', fontSize: 16, color: 'rgba(255,255,255,0.5)' }}>
         数据加载完成
       </div>
