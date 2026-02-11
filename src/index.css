@@ -53,6 +53,25 @@ body::after {
   gap: 20px;
 }
 
+.schedule-row-highlight {
+  background: linear-gradient(135deg, rgba(62, 150, 255, 0.18), rgba(25, 39, 70, 0.85));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.schedule-label {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #addbff;
+  font-size: 12px;
+}
+
+.schedule-row-content .schedule-label {
+  display: inline-block;
+  margin-left: 8px;
+}
+
 @media (max-width: 420px) {
   #root {
     padding: 30px 16px 60px;

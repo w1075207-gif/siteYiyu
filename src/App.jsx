@@ -51,7 +51,22 @@ export default function App() {
     );
   }
 
-  const { profile, schedule } = data;
+  const { profile, schedule = [] } = data;
+  const now = new Date();
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const upcoming = schedule
+    .map((item) => {
+      const dateValue = new Date(`${item.date}T00:00:00`);
+      const diffDays = Math.floor((dateValue.getTime() - startOfDay.getTime()) / 86400000);
+      return {
+        ...item,
+        label: diffDays === 0 ? '今天' : diffDays === 1 ? '明天' : '',
+        highlight: diffDays >= 0 && diffDays <= 1,
+        dateValue,
+      };
+    })
+    .filter((item) => item.dateValue >= startOfDay)
+    .sort((a, b) => a.dateValue - b.dateValue);
 
   const refreshSchedule = () => {
     setScheduleRefreshing(true);
@@ -64,7 +79,7 @@ export default function App() {
     <>
       <HeroCard profile={profile} onRefresh={handleRefresh} />
       <ScheduleCard
-        schedule={schedule}
+        schedule={upcoming}
         onScheduleChange={refreshSchedule}
         refreshing={scheduleRefreshing}
       />

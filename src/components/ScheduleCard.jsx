@@ -167,11 +167,13 @@ export default function ScheduleCard({ schedule = [], onScheduleChange, refreshi
                     opacity: isDeleting ? 0.6 : 1,
                     pointerEvents: isDeleting ? 'none' : undefined,
                   }}
-                  className="schedule-row"
+                  className={`schedule-row${item.highlight ? " schedule-row-highlight" : ""}`}
                 >
                   <div style={rowContentStyle} className="schedule-row-content">
                     <Text strong style={{ color: '#7dd3ff', fontSize: 16 }}>
-                      {item.date}
+                      {item.date}{item.label && (
+                        <span className="schedule-label">{item.label}</span>
+                      )}
                     </Text>
                     <Text style={{ fontSize: 16, fontWeight: 500 }} ellipsis>
                       {item.title}
