@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#05060a" />
+    <title>Yiyu 的空间</title>
+    <link rel="icon" href="favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="favicon.png" />
+    <link rel="stylesheet" href="styles.css?v=20260211-03" />
+    <script>
+      (function () {
+        const SITE_VERSION = "20260211-03";
+        try {
+          if (localStorage.getItem("siteVersion") !== SITE_VERSION) {
+            localStorage.setItem("siteVersion", SITE_VERSION);
+            window.location.reload();
+          }
+        } catch (err) {
+          console.error("localStorage issue", err);
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      const ROOT = document.getElementById("root");
+      const statusText = document.createElement("div");
+      statusText.className = "status-card";
+      statusText.textContent = "初始化中...";
+
+      function render(profile, schedule, status) {
+        const hero = `
+          <section class="hero-card">
+            <img class="avatar" src="avatar.png" alt="Yiyu 的头像" />
+            <div class="hero-text">
+              <h2>${profile.name}</h2>
+              <p class="tagline">${profile.tagline}</p>
+              <button class="refresh-btn">刷新页面</button>
+            </div>
+          </section>
+        `;
+
+        const items = schedule
+          .map((item) => {
+            return `
+              <div class="schedule-row">
+                <div class="schedule-grid">
+                  <div class="schedule-date">${item.date}</div>
+                  <div class="schedule-detail">${item.title}</div>
+                  <div class="note">${item.note}</div>
+                </div>
+              </div>
+            `;
+          })
+          .join("\n");
+
+        const scheduleCard = `
+          <section class="schedule-card">
+            <h3>未来几日计划</h3>
+            ${items}
+          </section>
+        `;
+
+        ROOT.innerHTML = hero + scheduleCard;
+        statusText.textContent = status;
+        ROOT.appendChild(statusText);
+        document.querySelector(".refresh-btn").addEventListener("click", () => {
+          try { localStorage.removeItem("siteVersion"); } catch (err) {}
+          window.location.reload();
+        });
+      }
+
+      fetch("/api/profile")
+        .then((res) => res.json())
+        .then((data) => {
+          render(data.profile, data.schedule, "数据加载完成");
+        })
+        .catch(() => {
+          statusText.textContent = "无法获取配置，请稍后再试。";
+          ROOT.appendChild(statusText);
+        });
+    </script>
+  </body>
+</html>

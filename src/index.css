@@ -1,0 +1,70 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+:root {
+  --safe-top: env(safe-area-inset-top, 24px);
+}
+
+body {
+  font-family: "Noto Sans SC", "Inter", system-ui, sans-serif;
+  color: #f7f9ff;
+  min-height: 100vh;
+  position: relative;
+  padding-top: calc(var(--safe-top) + 8px);
+  background: radial-gradient(circle at top, #101d42 0%, #05060a 60%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at top, rgba(16, 29, 66, 0.9), rgba(8, 9, 12, 0.95)),
+    linear-gradient(180deg, rgba(8, 9, 12, 0.45) 0%, rgba(5, 6, 10, 0.85) 70%, rgba(5, 6, 10, 0.95) 100%);
+  z-index: -2;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--safe-top) + 48px);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent);
+  pointer-events: none;
+  z-index: -1;
+}
+
+#root {
+  padding: 40px 20px 60px;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (max-width: 420px) {
+  #root {
+    padding: 30px 16px 60px;
+  }
+
+  .schedule-row {
+    grid-template-columns: 1fr !important;
+    text-align: left;
+  }
+
+  .schedule-note {
+    margin-top: 6px;
+    text-align: left !important;
+  }
+}

@@ -1,0 +1,138 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  height: 100%;
+  background: radial-gradient(circle at top, #101d42 0%, #05060a 60%);
+}
+:root {
+  --safe-top: env(safe-area-inset-top, 24px);
+}
+body {
+  font-family: "Noto Sans SC", "Inter", system-ui, sans-serif;
+  color: #f7f9ff;
+  min-height: 100vh;
+  position: relative;
+  padding-top: calc(var(--safe-top) + 8px);
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(16, 29, 66, 0.9), rgba(8, 9, 12, 0.95)),
+    linear-gradient(180deg, rgba(8, 9, 12, 0.45) 0%, rgba(5, 6, 10, 0.85) 70%, rgba(5, 6, 10, 0.95) 100%);
+  z-index: -2;
+}
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--safe-top) + 48px);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent);
+  pointer-events: none;
+  z-index: -1;
+}
+#root {
+  padding: 40px 20px 60px;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.hero-card,
+.schedule-card,
+.status-card {
+  border-radius: 24px;
+  background: rgba(10, 12, 22, 0.76);
+  box-shadow: 0 35px 65px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 24px;
+}
+.hero-card {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 26px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  background: #0c0f20;
+}
+.hero-text h2 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+.tagline {
+  color: #9bb2ff;
+  margin-bottom: 16px;
+}
+.refresh-btn {
+  width: 100%;
+  padding: 10px 0;
+  border: none;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #3898ff, #4fd2ff);
+  color: #03030b;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 120ms ease;
+}
+.refresh-btn:active {
+  transform: translateY(2px);
+}
+.schedule-card h3 {
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+.schedule-row + .schedule-row {
+  margin-top: 12px;
+}
+.schedule-grid {
+  display: grid;
+  grid-template-columns: 110px 1fr 90px;
+  align-items: center;
+  gap: 10px;
+}
+.schedule-date {
+  color: #7dd3ff;
+  font-weight: 600;
+  font-size: 16px;
+}
+.schedule-detail {
+  font-size: 18px;
+  font-weight: 500;
+}
+.note {
+  text-align: right;
+  color: #c7d6ff;
+}
+.status-card {
+  text-align: center;
+  font-size: 16px;
+}
+@media (max-width: 420px) {
+  .hero-card,
+  .schedule-card,
+  .status-card {
+    padding: 20px;
+  }
+  .schedule-grid {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+  .note {
+    text-align: left;
+    margin-top: 6px;
+  }
+  #root {
+    padding: 30px 16px 60px;
+  }
+}
