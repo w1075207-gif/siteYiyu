@@ -104,3 +104,43 @@ body::after {
     text-align: left !important;
   }
 }
+
+
+.component-card {
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+  background: radial-gradient(circle at 30% -20%, rgba(56, 152, 255, 0.12), rgba(4, 6, 12, 0.95));
+  backdrop-filter: blur(18px);
+}
+.hero-card {
+  padding: 32px !important;
+}
+.schedule-card {
+  padding: 28px !important;
+}
+.status-card {
+  padding: 20px 30px;
+}
+.component-modal .ant-modal-content {
+  background: linear-gradient(180deg, rgba(9, 18, 40, 0.9), rgba(5, 6, 10, 0.95));
+  border-radius: 20px;
+  color: #f7f9ff;
+}
+.schedule-row-highlight {
+  background: linear-gradient(135deg, rgba(62, 150, 255, 0.18), rgba(25, 39, 70, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.schedule-label {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #addbff;
+  font-size: 12px;
+  font-weight: 600;
+}
+.section-header {
+  font-size: 18px;
+  margin-bottom: 16px;
+}

@@ -101,6 +101,7 @@ export default function ScheduleCard({ schedule = [], onScheduleChange, refreshi
   return (
     <>
       <Card
+        className="component-card schedule-card"
         title={
           <Space>
             <span>未来几日计划</span>
@@ -217,6 +218,7 @@ export default function ScheduleCard({ schedule = [], onScheduleChange, refreshi
       </Card>
 
       <Modal
+        className="component-modal"
         title={editingId ? '编辑计划' : '添加计划'}
         open={modalOpen}
         onCancel={() => !submitting && setModalOpen(false)}
