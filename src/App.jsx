@@ -17,6 +17,7 @@ export default function App() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [scheduleRefreshing, setScheduleRefreshing] = useState(false);
 
   useEffect(() => {
     fetchProfile()
@@ -51,7 +52,6 @@ export default function App() {
   }
 
   const { profile, schedule } = data;
-  const [scheduleRefreshing, setScheduleRefreshing] = useState(false);
 
   const refreshSchedule = () => {
     setScheduleRefreshing(true);

@@ -50,28 +50,34 @@ async function initDb() {
   const count = db.exec("SELECT COUNT(*) FROM schedule");
   const isEmpty = count.length && count[0].values[0][0] === 0;
 
-  if (isEmpty && fs.existsSync(scheduleJsonPath)) {
+  function runMigration() {
+    if (!fs.existsSync(scheduleJsonPath)) return;
     try {
       const raw = fs.readFileSync(scheduleJsonPath, "utf8");
       const list = JSON.parse(raw);
-      if (Array.isArray(list)) {
-        const stmt = db.prepare(
-          "INSERT INTO schedule (id, date, title, note) VALUES (?, ?, ?, ?)"
-        );
-        for (const item of list) {
-          if (item.id && item.date && item.title) {
-            stmt.run([
-              item.id,
-              item.date,
-              item.title,
-              item.note || "",
-            ]);
-          }
+      if (!Array.isArray(list)) return;
+      const stmt = db.prepare(
+        "INSERT OR IGNORE INTO schedule (id, date, title, note) VALUES (?, ?, ?, ?)"
+      );
+      for (const item of list) {
+        if (item.id && item.date && item.title) {
+          stmt.bind([item.id, item.date, item.title, item.note || ""]);
+          stmt.step();
+          stmt.reset();
         }
-        stmt.free();
-        saveToFile();
       }
+      stmt.free();
+      saveToFile();
     } catch (_) {}
+  }
+
+  if (isEmpty) runMigration();
+
+  // If DB still has no rows (e.g. bad/corrupt file), re-migrate from JSON once
+  const firstGet = db.exec("SELECT COUNT(*) FROM schedule");
+  const stillEmpty = firstGet.length && firstGet[0].values[0][0] === 0;
+  if (stillEmpty && fs.existsSync(scheduleJsonPath)) {
+    runMigration();
   }
 
   function getSchedule() {
@@ -89,10 +95,12 @@ async function initDb() {
     const date = String(item.date).trim();
     const title = String(item.title).trim();
     const note = String(item.note ?? "").trim();
-    db.run(
-      "INSERT INTO schedule (id, date, title, note) VALUES (?, ?, ?, ?)",
-      [id, date, title, note]
+    const stmt = db.prepare(
+      "INSERT INTO schedule (id, date, title, note) VALUES (?, ?, ?, ?)"
     );
+    stmt.bind([id, date, title, note]);
+    stmt.step();
+    stmt.free();
     saveToFile();
     return { id, date, title, note };
   }
@@ -115,20 +123,24 @@ async function initDb() {
     const date = updates.date !== undefined ? String(updates.date).trim() : current.date;
     const title = updates.title !== undefined ? String(updates.title).trim() : current.title;
     const note = updates.note !== undefined ? String(updates.note).trim() : current.note;
-    db.run("UPDATE schedule SET date = ?, title = ?, note = ? WHERE id = ?", [
-      date,
-      title,
-      note,
-      id,
-    ]);
+    const upd = db.prepare(
+      "UPDATE schedule SET date = ?, title = ?, note = ? WHERE id = ?"
+    );
+    upd.bind([date, title, note, id]);
+    upd.step();
+    upd.free();
     saveToFile();
     return { id, date, title, note };
   }
 
   function deleteSchedule(id) {
-    const info = db.run("DELETE FROM schedule WHERE id = ?", [id]);
+    const stmt = db.prepare("DELETE FROM schedule WHERE id = ?");
+    stmt.bind([id]);
+    stmt.step();
+    const n = db.getRowsModified();
+    stmt.free();
     saveToFile();
-    return info.changes > 0;
+    return n > 0;
   }
 
   return { getSchedule, createSchedule, updateSchedule, deleteSchedule };
