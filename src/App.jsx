@@ -79,6 +79,11 @@ export default function App() {
 
   return (
     <div className="page-shell">
+      <div className="toolbar">
+        <button className="menu-button" aria-label="Menu">☰</button>
+        <div className="toolbar-title">工具栏</div>
+        <span className="toolbar-note">未来拓展 · 快速入口</span>
+      </div>
       <div className="hero-wrap">
         <HeroCard profile={profile} onRefresh={handleRefresh} />
       </div>
