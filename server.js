@@ -13,7 +13,6 @@ const scriptPath = path.join(__dirname, "scripts", "sync_calendar.py");
 const pythonPath = fs.existsSync(path.join(__dirname, ".venv", "bin", "python"))
   ? path.join(__dirname, ".venv", "bin", "python")
   : "python3";
-const notesPath = path.join(__dirname, "notes", "notes.json");
 
 const profile = {
   name: "YiyuBot 的空间",
@@ -104,16 +103,6 @@ function deleteCalDAVEvent(existing) {
   runCalDAVScript(args);
 }
 
-function loadNotes() {
-  try {
-    const raw = fs.readFileSync(notesPath, "utf8");
-    return JSON.parse(raw);
-  } catch (err) {
-    console.error("Failed to load notes:", err);
-    return { sections: [] };
-  }
-}
-
 app.get("/api/profile", (req, res) => {
   const schedule = scheduleDb ? scheduleDb.getSchedule() : [];
   res.json({ profile, schedule });
@@ -122,11 +111,6 @@ app.get("/api/profile", (req, res) => {
 app.get("/api/schedule", (req, res) => {
   const schedule = scheduleDb ? scheduleDb.getSchedule() : [];
   res.json(schedule);
-});
-
-app.get("/api/notes", (req, res) => {
-  const notes = loadNotes();
-  res.json(notes);
 });
 
 app.post("/api/schedule", (req, res) => {

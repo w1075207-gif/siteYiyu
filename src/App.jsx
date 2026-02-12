@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Spin, message } from 'antd';
 import HeroCard from './components/HeroCard';
 import ScheduleCard from './components/ScheduleCard';
-import NotesCard from './components/NotesCard';
 import { fetchProfile } from './api/profile';
 
 const SITE_VERSION = '20260211-react';
@@ -19,8 +18,6 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [scheduleRefreshing, setScheduleRefreshing] = useState(false);
-  const [notes, setNotes] = useState({ sections: [] });
-  const [notesLoading, setNotesLoading] = useState(true);
 
   useEffect(() => {
     fetchProfile()
@@ -35,14 +32,6 @@ export default function App() {
         message.error('无法获取配置，请稍后再试。');
       })
       .finally(() => setLoading(false));
-  }, []);
-
-  useEffect(() => {
-    fetch('/api/notes')
-      .then((res) => res.json())
-      .then((payload) => setNotes(payload))
-      .catch(() => setNotes({ sections: [] }))
-      .finally(() => setNotesLoading(false));
   }, []);
 
   if (loading) {
@@ -97,9 +86,6 @@ export default function App() {
           onScheduleChange={refreshSchedule}
           refreshing={scheduleRefreshing}
         />
-      </div>
-      <div className="notes-wrap">
-        <NotesCard notes={notes} loading={notesLoading} />
       </div>
       <div className="status-footer" style={{ textAlign: 'center', fontSize: 16, color: 'rgba(255,255,255,0.5)' }}>
         数据加载完成

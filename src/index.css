@@ -194,22 +194,3 @@ body::after {
   font-size: 18px;
   margin-bottom: 16px;
 }
-
-.notes-wrap {
-  width: 100%;
-}
-
-@media (min-width: 900px) {
-  #root > .notes-wrap {
-    width: 100%;
-    max-width: 520px;
-  }
-}
-
-.notes-section + .notes-section {
-  margin-top: 20px;
-}
-
-.notes-card .ant-card-body {
-  padding: 24px;
-}
