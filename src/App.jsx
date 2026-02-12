@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Spin, message, Space } from 'antd';
 import HeroCard from './components/HeroCard';
 import ScheduleCard from './components/ScheduleCard';
+import DealsGrid from './components/DealsGrid';
 import { fetchProfile } from './api/profile';
 
 const SITE_VERSION = '20260211-react';
@@ -109,6 +110,7 @@ export default function App() {
           )}
         </div>
       </div>
+      <DealsGrid />
       <div className="status-footer">
         数据加载完成 · {scheduleRefreshing ? '正在同步...' : '同步正常'}
       </div>

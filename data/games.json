@@ -1,0 +1,54 @@
+[
+  {
+    "title": "Car Flipper Simulator 2024",
+    "slug": "car-flipper-simulator-2024",
+    "cover": "https://images.nintendolife.com/6b8b3b0dde8744/placeholder/carflipper.jpg",
+    "list_price": 14.99,
+    "sale_price": 2.99,
+    "discount": -80,
+    "lowest": true,
+    "genre": "驾驶 / 模拟",
+    "languages": ["中文", "英文"],
+    "expiry": "2026-02-15T08:00:00Z",
+    "platform": "UK"
+  },
+  {
+    "title": "Shoe Salesman Mania",
+    "slug": "shoe-salesman-mania",
+    "cover": "https://images.nintendolife.com/placeholder/shoe.jpg",
+    "list_price": 3.99,
+    "sale_price": 1.99,
+    "discount": -50,
+    "lowest": false,
+    "genre": "独立 / 经营",
+    "languages": ["英文"],
+    "expiry": "2026-02-20T08:00:00Z",
+    "platform": "UK"
+  },
+  {
+    "title": "Rogue Galaxy Remaster",
+    "slug": "rogue-galaxy-remaster",
+    "cover": "https://images.nintendolife.com/placeholder/rogue.jpg",
+    "list_price": 49.99,
+    "sale_price": 24.99,
+    "discount": -50,
+    "lowest": true,
+    "genre": "RPG",
+    "languages": ["中文", "日文", "英文"],
+    "expiry": "2026-02-17T08:00:00Z",
+    "platform": "HK"
+  },
+  {
+    "title": "Steam Revival",
+    "slug": "steam-revival",
+    "cover": "https://images.nintendolife.com/placeholder/steam.jpg",
+    "list_price": 29.99,
+    "sale_price": 14.99,
+    "discount": -50,
+    "lowest": false,
+    "genre": "动作",
+    "languages": ["中文", "英文"],
+    "expiry": "2026-02-19T08:00:00Z",
+    "platform": "UK"
+  }
+]
