@@ -15,7 +15,10 @@ const rowStyle = {
   flexDirection: 'column',
   gap: 10,
   padding: '18px 0',
-  borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+  borderRadius: 28,
+  border: '1px solid rgba(255, 255, 255, 0.08)',
+  background: 'rgba(16, 22, 46, 0.6)',
+  boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.06)',
 };
 
 const rowContentStyle = {
@@ -62,15 +65,12 @@ export default function ScheduleCard({ schedule = [], refreshing = false }) {
           暂无可展示的计划，稍后自动同步
         </Text>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {schedule.map((item) => (
             <div
               key={item.id}
               style={{
                 ...rowStyle,
-                borderRadius: 20,
-                background: 'rgba(16, 22, 46, 0.55)',
-                marginBottom: 10,
               }}
               className={`schedule-row${item.highlight ? ' schedule-row-highlight' : ''}`}
             >
