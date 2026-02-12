@@ -11,7 +11,8 @@
     "genre": "模拟 / 经营",
     "languages": ["中文", "英文"],
     "expiry": "2026-02-15T08:00:00Z",
-    "platform": "HK"
+    "platform": "HK",
+    "link": "https://ec.nintendo.com/HK/zh-HK/us/store/products/car-flipper-simulator-2024-car-mechanic-wash-car-sale-switch/"
   },
   {
     "title": "Shoe Salesman Mania",
@@ -25,7 +26,8 @@
     "genre": "动作 / 独立",
     "languages": ["英文"],
     "expiry": "2026-02-20T08:00:00Z",
-    "platform": "HK"
+    "platform": "HK",
+    "link": "https://ec.nintendo.com/HK/zh-HK/us/store/products/shoe-salesman-mania-switch/"
   },
   {
     "title": "Sacrifice For Sale",
@@ -39,7 +41,8 @@
     "genre": "冒险 / 叙事",
     "languages": ["中文", "英文"],
     "expiry": "2026-02-17T08:00:00Z",
-    "platform": "HK"
+    "platform": "HK",
+    "link": "https://ec.nintendo.com/HK/zh-HK/us/store/products/sacrifice-for-sale-switch/"
   },
   {
     "title": "Universe For Sale",
@@ -53,6 +56,7 @@
     "genre": "冒险 / 角色",
     "languages": ["中文", "英文"],
     "expiry": "2026-02-19T08:00:00Z",
-    "platform": "HK"
+    "platform": "HK",
+    "link": "https://ec.nintendo.com/HK/zh-HK/us/store/products/universe-for-sale-switch/"
   }
 ]

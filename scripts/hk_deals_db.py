@@ -22,7 +22,8 @@ CREATE TABLE IF NOT EXISTS {TABLE} (
     genre TEXT,
     languages TEXT,
     expiry TEXT,
-    platform TEXT
+    platform TEXT,
+    purchase_link TEXT
 );
 '''
 
@@ -46,8 +47,8 @@ def ensure_db(conn):
 def upsert(conn, row):
     stmt = f'''
     INSERT INTO {TABLE} (id, title, slug, cover, currency, list_price, sale_price,
-        discount, lowest, genre, languages, expiry, platform)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        discount, lowest, genre, languages, expiry, platform, purchase_link)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ON CONFLICT(id) DO UPDATE SET
         title=excluded.title,
         slug=excluded.slug,
@@ -60,7 +61,8 @@ def upsert(conn, row):
         genre=excluded.genre,
         languages=excluded.languages,
         expiry=excluded.expiry,
-        platform=excluded.platform;
+        platform=excluded.platform,
+        purchase_link=excluded.purchase_link;
     '''
     conn.execute(stmt, row)
 
@@ -88,6 +90,7 @@ def main():
                 languages,
                 entry.get('expiry'),
                 entry.get('platform', 'HK'),
+                entry.get('link') or entry.get('purchase_link'),
             )
             upsert(conn, row)
     conn.close()

@@ -48,7 +48,14 @@ export default function DealsGrid({ data = games }) {
                 <span className="lang">{game.languages.join(' · ') || '未知语言'}</span>
                 <span className="countdown">{parseExpiry(game.expiry)} 剩余</span>
               </div>
-              <button className="cta">立即购买</button>
+              <a
+                className="cta"
+                href={game.link || '#'}
+                target="_blank"
+                rel="noreferrer"
+              >
+                立即购买
+              </a>
             </div>
           </article>
         ))}
