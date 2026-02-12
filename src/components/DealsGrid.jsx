@@ -1,8 +1,8 @@
 import './DealsGrid.css';
 import games from '../../data/games.json';
 
-const formatPrice = (value) =>
-  typeof value === 'number' ? `£${value.toFixed(2)}` : value;
+const formatPrice = (value, currency = 'HK$') =>
+  typeof value === 'number' ? `${currency} ${value.toFixed(2)}` : value;
 
 export default function DealsGrid({ data = games }) {
   const now = new Date();
@@ -20,16 +20,16 @@ export default function DealsGrid({ data = games }) {
     <section className="deals-shell">
       <header className="deals-header">
         <div>
-          <p className="tagline">限时特惠</p>
+          <p className="tagline">限时特惠 · 香港站</p>
           <h2>任天堂 Switch 折扣精选</h2>
         </div>
-        <button className="deals-filter">按地区 / 排序</button>
+        <button className="deals-filter">香港区限定</button>
       </header>
       <div className="deals-grid">
         {data.map((game) => (
           <article key={game.slug} className="deal-card">
             <div className="cover" style={{ backgroundImage: `url(${game.cover})` }}>
-              <span className="corner-badge">{game.discount}%</span>
+              <span className="corner-badge">{game.discount ? `${game.discount}%` : `-`}</span>
               {game.lowest && <span className="lowest-badge">史低价</span>}
             </div>
             <div className="deal-body">
@@ -39,8 +39,10 @@ export default function DealsGrid({ data = games }) {
               </div>
               <p className="genre">{game.genre}</p>
               <div className="price-row">
-                <span className="original">{formatPrice(game.list_price)}</span>
-                <span className="sale">{formatPrice(game.sale_price)}</span>
+                {game.sale_price < game.list_price && (
+                  <span className="original">{formatPrice(game.list_price, game.currency)}</span>
+                )}
+                <span className="sale">{formatPrice(game.sale_price, game.currency)}</span>
               </div>
               <div className="meta-row">
                 <span className="lang">{game.languages.join(' · ') || '未知语言'}</span>

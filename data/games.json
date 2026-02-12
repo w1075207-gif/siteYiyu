@@ -3,19 +3,21 @@
     "title": "Car Flipper Simulator 2024",
     "slug": "car-flipper-simulator-2024",
     "cover": "https://assets.nintendo.com/image/fetch/q_auto/f_auto/https://atum-img-lp1.cdn.nintendo.net/i/c/1b7b184361b94dfe973c83c1d70fc9ca_1024",
+    "currency": "HK$",
     "list_price": 14.99,
     "sale_price": 2.99,
-    "discount": -80,
+    "discount": 80,
     "lowest": true,
     "genre": "模拟 / 经营",
     "languages": ["中文", "英文"],
     "expiry": "2026-02-15T08:00:00Z",
-    "platform": "UK"
+    "platform": "HK"
   },
   {
     "title": "Shoe Salesman Mania",
     "slug": "shoe-salesman-mania",
     "cover": "https://assets.nintendo.com/image/fetch/q_auto/f_auto/https://atum-img-lp1.cdn.nintendo.net/i/c/ec90d16a135246ff988472abf1ca0192_1024",
+    "currency": "HK$",
     "list_price": 3.99,
     "sale_price": 3.99,
     "discount": 0,
@@ -23,12 +25,13 @@
     "genre": "动作 / 独立",
     "languages": ["英文"],
     "expiry": "2026-02-20T08:00:00Z",
-    "platform": "UK"
+    "platform": "HK"
   },
   {
     "title": "Sacrifice For Sale",
     "slug": "sacrifice-for-sale-switch",
     "cover": "https://assets.nintendo.com/image/fetch/q_auto/f_auto/https://atum-img-lp1.cdn.nintendo.net/i/c/039060d3d2e948db91986cada9f0377b_1024",
+    "currency": "HK$",
     "list_price": 9.99,
     "sale_price": 9.99,
     "discount": 0,
@@ -36,12 +39,13 @@
     "genre": "冒险 / 叙事",
     "languages": ["中文", "英文"],
     "expiry": "2026-02-17T08:00:00Z",
-    "platform": "UK"
+    "platform": "HK"
   },
   {
     "title": "Universe For Sale",
     "slug": "universe-for-sale-switch",
     "cover": "https://assets.nintendo.com/image/fetch/q_auto/f_auto/https://atum-img-lp1.cdn.nintendo.net/i/c/1523505d8ada4ef9af7cbf3c08172bf6_1024",
+    "currency": "HK$",
     "list_price": 14.99,
     "sale_price": 14.99,
     "discount": 0,
@@ -49,6 +53,6 @@
     "genre": "冒险 / 角色",
     "languages": ["中文", "英文"],
     "expiry": "2026-02-19T08:00:00Z",
-    "platform": "UK"
+    "platform": "HK"
   }
 ]
