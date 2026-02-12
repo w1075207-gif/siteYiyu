@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Spin, message, Divider, Space } from 'antd';
+import { Spin, message, Space } from 'antd';
 import HeroCard from './components/HeroCard';
 import ScheduleCard from './components/ScheduleCard';
 import { fetchProfile } from './api/profile';
@@ -11,17 +11,6 @@ function handleRefresh() {
     localStorage.removeItem('siteVersion');
   } catch (_) {}
   window.location.reload();
-}
-
-function InsightItem({ label, value, accent }) {
-  return (
-    <div className="insight-item">
-      <span className="insight-label" style={{ color: accent || '#4dd6ff' }}>
-        {label}
-      </span>
-      <p className="insight-value">{value}</p>
-    </div>
-  );
 }
 
 export default function App() {
@@ -87,25 +76,6 @@ export default function App() {
   };
 
   const nextReminder = upcoming[0];
-  const insightItems = [
-    {
-      label: '下一条提醒',
-      value: nextReminder
-        ? `${nextReminder.date} · ${nextReminder.title}${nextReminder.note ? ` (${nextReminder.note})` : ''}`
-        : '暂无提醒',
-      accent: '#ffd166',
-    },
-    {
-      label: '心跳状态',
-      value: scheduleRefreshing ? '正在同步...' : '已同步（刷新可重跑）',
-      accent: '#4dd6ff',
-    },
-    {
-      label: '设计方向',
-      value: '冷峻科技 · Flow-driven',
-      accent: '#9dd0ff',
-    },
-  ];
 
   return (
     <div className="page-shell">
@@ -120,25 +90,18 @@ export default function App() {
             refreshing={scheduleRefreshing}
           />
         </div>
-        <div className="insight-col">
-          <div className="insight-card">
-            <p className="insight-heading">Flow Status</p>
-            <h3 className="insight-title">提醒流动线索</h3>
-            <Divider className="insight-divider" />
-            <div className="insight-list">
-              {insightItems.map((item) => (
-                <InsightItem
-                  key={item.label}
-                  label={item.label}
-                  value={item.value}
-                  accent={item.accent}
-                />
-              ))}
-            </div>
-            <div className="insight-footer">
-              <span>智能提醒 · 线性流程 · 霓虹动效</span>
-            </div>
-          </div>
+        <div className="note-panel">
+          <p className="note-label">当前提醒笔记</p>
+          {nextReminder ? (
+            <>
+              <h3 className="note-title">{nextReminder.title}</h3>
+              {nextReminder.time && <p className="note-time">{nextReminder.time}</p>}
+              {nextReminder.note && <p className="note-text">{nextReminder.note}</p>}
+              <p className="note-date">{nextReminder.date}</p>
+            </>
+          ) : (
+            <p className="note-text">暂无待办提醒，等待同步。</p>
+          )}
         </div>
       </div>
       <div className="status-footer">

@@ -39,6 +39,11 @@ const valueStyle = {
   fontWeight: 600,
 };
 
+const noteStyle = {
+  fontSize: 16,
+  color: '#62c4ff',
+};
+
 export default function ScheduleCard({ schedule = [], refreshing = false }) {
   return (
     <Card
@@ -71,12 +76,10 @@ export default function ScheduleCard({ schedule = [], refreshing = false }) {
             >
               <div style={rowContentStyle}>
                 <div>
-                  <Text style={{ ...labelStyle }}>{item.label || item.date}</Text>
+                  <Text style={labelStyle}>{item.label || item.date}</Text>
                   <p style={valueStyle}>{item.title}</p>
                 </div>
-                <Text style={{ color: '#9bb2ff', minWidth: 80, textAlign: 'right' }}>
-                  {item.note || '—'}
-                </Text>
+                <Text style={noteStyle}>{item.time || item.note || '—'}</Text>
               </div>
             </div>
           ))}

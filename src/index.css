@@ -61,6 +61,49 @@ body::after {
   gap: 24px;
 }
 
+.schedule-col {
+  animation: fadeInUp 0.7s ease-out both;
+}
+
+.note-panel {
+  background: rgba(10, 12, 25, 0.88);
+  border-radius: 32px;
+  padding: 28px;
+  border: 1px solid rgba(77, 214, 255, 0.18);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(18px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.note-label {
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.note-title {
+  font-size: 20px;
+  color: #f8fbff;
+}
+
+.note-time {
+  font-size: 22px;
+  color: #ffd166;
+  letter-spacing: 0.1em;
+}
+
+.note-text {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.note-date {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
 .schedule-card {
   padding: 28px;
   border: none;
@@ -72,8 +115,13 @@ body::after {
   padding: 0;
 }
 
-.schedule-row-highlight {
-  background: linear-gradient(135deg, rgba(77, 214, 255, 0.2), rgba(14, 29, 62, 0.9));
+.schedule-row-content {
+  gap: 8;
+}
+
+.schedule-time {
+  font-size: 16px;
+  color: #62c4ff;
 }
 
 .status-footer {
@@ -81,15 +129,6 @@ body::after {
   font-size: 15px;
   color: rgba(255, 255, 255, 0.6);
   letter-spacing: 0.2em;
-}
-
-.tag {
-  background: rgba(77, 214, 255, 0.12);
-  color: #62c4ff;
-  border-radius: 999px;
-  padding: 4px 12px;
-  font-size: 11px;
-  letter-spacing: 0.3em;
 }
 
 .page-loading {
