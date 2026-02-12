@@ -61,122 +61,35 @@ body::after {
   gap: 24px;
 }
 
-.schedule-col {
-  animation: fadeInUp 0.7s ease-out both;
-}
-
-.insight-col {
-  animation: fadeInUp 0.9s ease-out both;
-}
-
-.component-card {
-  background: rgba(5, 8, 16, 0.7);
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 30px 65px rgba(3, 4, 7, 0.7);
-  backdrop-filter: blur(22px);
-}
-
-.hero-card {
-  padding: 32px !important;
-  border: none;
-}
-
 .schedule-card {
-  padding: 28px !important;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  min-height: 420px;
+  padding: 28px;
+  border: none;
+  min-height: 360px;
+}
+
+.schedule-row {
+  border-radius: 28px;
+  padding: 0;
+}
+
+.schedule-row-highlight {
+  background: linear-gradient(135deg, rgba(77, 214, 255, 0.2), rgba(14, 29, 62, 0.9));
 }
 
 .status-footer {
   text-align: center;
   font-size: 15px;
   color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.2em;
 }
 
-.insight-card {
-  padding: 28px;
-  background: linear-gradient(180deg, rgba(13, 19, 34, 0.9), rgba(6, 8, 15, 0.95));
-  border-radius: 24px;
-  border: 1px solid rgba(77, 214, 255, 0.2);
-  box-shadow: 0 25px 60px rgba(2, 4, 10, 0.7);
-}
-
-.insight-heading {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.3em;
+.tag {
+  background: rgba(77, 214, 255, 0.12);
   color: #62c4ff;
-  margin-bottom: 4px;
-}
-
-.insight-title {
-  font-size: 24px;
-  color: #f8fbff;
-  margin-bottom: 12px;
-}
-
-.insight-divider {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  margin-bottom: 20px;
-}
-
-.insight-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.insight-item {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.insight-label {
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
-
-.insight-value {
-  font-size: 18px;
-  color: #f8fbff;
-  line-height: 1.4;
-}
-
-.insight-footer {
-  margin-top: 24px;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.schedule-row-highlight {
-  background: linear-gradient(135deg, rgba(77, 214, 255, 0.2), rgba(14, 29, 62, 0.9));
-  border: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-.schedule-cell-date {
-  font-size: 16px;
-  font-weight: 600;
-  color: #7dd3ff;
-}
-
-.schedule-row-content {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.schedule-row:hover .schedule-row-content {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
-}
-
-.schedule-row-actions button {
-  color: #9bb2ff;
-}
-
-.status-footer {
-  letter-spacing: 0.2em;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 11px;
+  letter-spacing: 0.3em;
 }
 
 .page-loading {
@@ -214,7 +127,7 @@ body::after {
   }
 
   .main-grid {
-    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-columns: 1.4fr 0.6fr;
     align-items: flex-start;
   }
 

@@ -1,265 +1,87 @@
-import { useState } from 'react';
-import { Card, Typography, Button, Modal, Form, Input, Popconfirm, message, Spin, Space } from 'antd';
-import { createSchedule, updateSchedule, deleteSchedule } from '../api/schedule';
+import { Card, Typography, Space } from 'antd';
 
 const { Text } = Typography;
 
 const cardStyle = {
-  borderRadius: 24,
-  background: 'rgba(10, 12, 22, 0.76)',
-  boxShadow: '0 35px 65px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
-  border: '1px solid rgba(255, 255, 255, 0.08)',
+  borderRadius: 32,
+  border: 0,
+  background: 'rgba(6, 10, 20, 0.9)',
+  boxShadow: '0 35px 65px rgba(0, 0, 0, 0.65)',
+  backdropFilter: 'blur(24px)',
 };
 
 const rowStyle = {
-  display: 'grid',
-  gridTemplateColumns: '1fr minmax(0, auto)',
-  alignItems: 'center',
-  gap: 16,
-  padding: '14px 0',
-  borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
-  minHeight: 52,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 10,
+  padding: '18px 0',
+  borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
 };
 
 const rowContentStyle = {
-  display: 'grid',
-  gridTemplateColumns: '110px 1fr 100px',
+  display: 'flex',
   alignItems: 'center',
-  gap: 12,
-  minWidth: 0,
-  overflow: 'hidden',
+  justifyContent: 'space-between',
+  gap: 16,
+  width: '100%',
 };
 
-export default function ScheduleCard({ schedule = [], onScheduleChange, refreshing = false }) {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editingId, setEditingId] = useState(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [deletingId, setDeletingId] = useState(null);
-  const [form] = Form.useForm();
+const labelStyle = {
+  fontSize: 14,
+  color: '#8cd6ff',
+  letterSpacing: 0.15,
+  textTransform: 'uppercase',
+};
 
-  const isMobile = () => typeof window !== 'undefined' && window.innerWidth <= 480;
-  const busy = submitting || deletingId;
+const valueStyle = {
+  fontSize: 18,
+  color: '#f8fbff',
+  fontWeight: 600,
+};
 
-  const openAdd = () => {
-    setEditingId(null);
-    form.resetFields();
-    setModalOpen(true);
-  };
-
-  const openEdit = (item) => {
-    setEditingId(item.id);
-    form.setFieldsValue({ date: item.date, title: item.title, note: item.note || '' });
-    setModalOpen(true);
-  };
-
-  const handleSubmit = async () => {
-    try {
-      const values = await form.validateFields();
-      setSubmitting(true);
-      if (editingId) {
-        await updateSchedule(editingId, values);
-        message.success({ content: '已保存', duration: 2 });
-        setModalOpen(false);
-        const refresh = onScheduleChange?.();
-        if (refresh && typeof refresh.then === 'function') {
-          refresh.catch(() => message.warning({ content: '已保存，列表未更新，请刷新页面', duration: 4 }));
-        }
-      } else {
-        await createSchedule(values);
-        message.success({ content: '已添加', duration: 2 });
-        setModalOpen(false);
-        const refresh = onScheduleChange?.();
-        if (refresh && typeof refresh.then === 'function') {
-          refresh.catch(() => message.warning({ content: '已添加，列表未更新，请刷新页面', duration: 4 }));
-        }
-      }
-    } catch (e) {
-      if (e.errorFields) return; // form validation, no toast
-      message.error({ content: e.message || '保存失败，请重试', duration: 3 });
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      setDeletingId(id);
-      await deleteSchedule(id);
-      message.success({ content: '已删除', duration: 2 });
-      const refresh = onScheduleChange?.();
-      if (refresh && typeof refresh.then === 'function') {
-        refresh.catch(() => {
-          message.warning({ content: '已删除，列表未更新，请刷新页面', duration: 4 });
-        });
-      }
-    } catch (e) {
-      message.error({ content: e.message || '删除失败，请重试', duration: 3 });
-    } finally {
-      setDeletingId(null);
-    }
-  };
-
+export default function ScheduleCard({ schedule = [], refreshing = false }) {
   return (
-    <>
-      <Card
-        className="component-card schedule-card"
-        title={
-          <Space>
-            <span>未来几日计划</span>
-            {refreshing && (
-              <Spin size="small" />
-            )}
-          </Space>
-        }
-        style={cardStyle}
-        styles={{ body: { padding: 24, position: 'relative' } }}
-        extra={
-          <Button
-            type="primary"
-            onClick={openAdd}
-            loading={refreshing}
-            disabled={busy}
-            size="large"
-            style={{
-              minHeight: 44,
-              borderRadius: 12,
-              background: 'linear-gradient(135deg, #3898ff, #4fd2ff)',
-              border: 'none',
-              color: '#03030b',
-              fontWeight: 600,
-            }}
-          >
-            添加
-          </Button>
-        }
-      >
-        {refreshing && schedule?.length > 0 && (
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'rgba(10,12,22,0.6)',
-              borderRadius: 24,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 1,
-            }}
-          >
-            <Spin size="large" tip="刷新中..." />
-          </div>
-        )}
-        {!schedule?.length && !refreshing ? (
-          <Text type="secondary" style={{ display: 'block', padding: '12px 0' }}>
-            暂无计划，点击右上角「添加」创建
-          </Text>
-        ) : !schedule?.length && refreshing ? (
-          <div style={{ padding: 24, textAlign: 'center' }}>
-            <Spin tip="加载中..." />
-          </div>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-            {schedule.map((item) => {
-              const isDeleting = deletingId === item.id;
-              return (
-                <div
-                  key={item.id}
-                  style={{
-                    ...rowStyle,
-                    opacity: isDeleting ? 0.6 : 1,
-                    pointerEvents: isDeleting ? 'none' : undefined,
-                  }}
-                  className={`schedule-row${item.highlight ? " schedule-row-highlight" : ""}`}
-                >
-                  <div style={rowContentStyle} className="schedule-row-content">
-                    <span className="schedule-cell schedule-cell-date">
-                      {(item.label === '今天' || item.label === '明天')
-                        ? <span className="schedule-label schedule-label-only">{item.label}</span>
-                        : item.date
-                      }
-                    </span>
-                    <span className="schedule-cell schedule-cell-title" title={item.title}>
-                      {item.title}
-                    </span>
-                    <span className="schedule-cell schedule-cell-note" title={item.note || ''}>
-                      {item.note || '—'}
-                    </span>
-                  </div>
-                  <div className="schedule-row-actions" style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
-                    <Button
-                      type="text"
-                      onClick={() => openEdit(item)}
-                      disabled={busy}
-                      style={{ color: '#9bb2ff', minWidth: 44, minHeight: 44 }}
-                    >
-                      编辑
-                    </Button>
-                    <Popconfirm
-                      title="确定删除这条计划？"
-                      onConfirm={() => handleDelete(item.id)}
-                      okText="删除"
-                      cancelText="取消"
-                      okButtonProps={{ danger: true, loading: isDeleting }}
-                    >
-                      <Button
-                        type="text"
-                        danger
-                        loading={isDeleting}
-                        disabled={busy && !isDeleting}
-                        style={{ minWidth: 44, minHeight: 44 }}
-                      >
-                        {isDeleting ? '删除中' : '删除'}
-                      </Button>
-                    </Popconfirm>
-                  </div>
+    <Card
+      className="component-card schedule-card"
+      title={
+        <Space>
+          <span>未来几日计划</span>
+          {refreshing && <span className="tag">同步中...</span>}
+        </Space>
+      }
+      style={cardStyle}
+      bodyStyle={{ padding: 24 }}
+    >
+      {!schedule?.length ? (
+        <Text type="secondary" style={{ display: 'block', padding: '12px 0' }}>
+          暂无可展示的计划，稍后自动同步
+        </Text>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+          {schedule.map((item) => (
+            <div
+              key={item.id}
+              style={{
+                ...rowStyle,
+                borderRadius: 20,
+                background: 'rgba(16, 22, 46, 0.55)',
+                marginBottom: 10,
+              }}
+              className={`schedule-row${item.highlight ? ' schedule-row-highlight' : ''}`}
+            >
+              <div style={rowContentStyle}>
+                <div>
+                  <Text style={{ ...labelStyle }}>{item.label || item.date}</Text>
+                  <p style={valueStyle}>{item.title}</p>
                 </div>
-              );
-            })}
-          </div>
-        )}
-      </Card>
-
-      <Modal
-        className="component-modal"
-        title={editingId ? '编辑计划' : '添加计划'}
-        open={modalOpen}
-        onCancel={() => !submitting && setModalOpen(false)}
-        onOk={handleSubmit}
-        confirmLoading={submitting}
-        destroyOnClose
-        width={isMobile() ? 'calc(100vw - 32px)' : 420}
-        style={{ top: isMobile() ? 24 : undefined }}
-        okText={submitting ? '保存中...' : '保存'}
-        cancelText="取消"
-        closable={!submitting}
-        maskClosable={!submitting}
-        keyboard={!submitting}
-        styles={{
-          body: { paddingTop: 24 },
-        }}
-      >
-        <Form form={form} layout="vertical" style={{ marginTop: 8 }}>
-          <Form.Item
-            name="date"
-            label="日期"
-            rules={[{ required: true, message: '请选择日期' }]}
-            validateTrigger={['onChange', 'onBlur']}
-          >
-            <Input type="date" size="large" style={{ minHeight: 44 }} />
-          </Form.Item>
-          <Form.Item
-            name="title"
-            label="事项"
-            rules={[{ required: true, message: '请输入事项' }]}
-            validateTrigger={['onChange', 'onBlur']}
-          >
-            <Input placeholder="例如：取 jacket" size="large" style={{ minHeight: 44 }} />
-          </Form.Item>
-          <Form.Item name="note" label="备注">
-            <Input placeholder="例如：08:00 CET" size="large" style={{ minHeight: 44 }} />
-          </Form.Item>
-        </Form>
-      </Modal>
-    </>
+                <Text style={{ color: '#9bb2ff', minWidth: 80, textAlign: 'right' }}>
+                  {item.note || '—'}
+                </Text>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </Card>
   );
 }
