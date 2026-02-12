@@ -5,34 +5,35 @@ const { Text } = Typography;
 const cardStyle = {
   borderRadius: 32,
   border: 0,
-  background: 'rgba(6, 10, 20, 0.9)',
-  boxShadow: '0 35px 65px rgba(0, 0, 0, 0.65)',
-  backdropFilter: 'blur(24px)',
+  background: 'rgba(6, 10, 20, 0.95)',
+  boxShadow: '0 40px 90px rgba(0, 0, 0, 0.75)',
+  backdropFilter: 'blur(26px)',
 };
 
 const rowStyle = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 10,
-  padding: '18px 0',
-  borderRadius: 28,
+  gap: 12,
+  padding: '20px 26px',
+  borderRadius: 32,
   border: '1px solid rgba(255, 255, 255, 0.08)',
-  background: 'rgba(16, 22, 46, 0.6)',
-  boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.06)',
+  background: 'rgba(18, 24, 50, 0.75)',
+  boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.03)',
 };
 
 const rowContentStyle = {
   display: 'flex',
+  flexWrap: 'wrap',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: 16,
+  gap: 18,
   width: '100%',
 };
 
 const labelStyle = {
   fontSize: 14,
   color: '#8cd6ff',
-  letterSpacing: 0.15,
+  letterSpacing: 0.18,
   textTransform: 'uppercase',
 };
 
@@ -69,9 +70,7 @@ export default function ScheduleCard({ schedule = [], refreshing = false }) {
           {schedule.map((item) => (
             <div
               key={item.id}
-              style={{
-                ...rowStyle,
-              }}
+              style={rowStyle}
               className={`schedule-row${item.highlight ? ' schedule-row-highlight' : ''}`}
             >
               <div style={rowContentStyle}>
