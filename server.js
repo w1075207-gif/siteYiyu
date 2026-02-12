@@ -85,14 +85,12 @@ app.use((req, res) => {
   });
 });
 
-initDb()
-  .then((db) => {
-    scheduleDb = db;
-    app.listen(PORT, HOST, () => {
-      console.log(`Personal site running on http://${HOST}:${PORT} (SQLite)`);
-    });
-  })
-  .catch((err) => {
-    console.error("DB init failed:", err);
-    process.exit(1);
+try {
+  scheduleDb = initDb();
+  app.listen(PORT, HOST, () => {
+    console.log(`Personal site running on http://${HOST}:${PORT} (SQLite)`);
   });
+} catch (err) {
+  console.error("DB init failed:", err);
+  process.exit(1);
+}
