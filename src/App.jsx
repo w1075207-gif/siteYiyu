@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Spin, message, Space } from 'antd';
+import { Spin, message } from 'antd';
 import HeroCard from './components/HeroCard';
 import ScheduleCard from './components/ScheduleCard';
 import DealsGrid from './components/DealsGrid';
@@ -19,6 +19,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [scheduleRefreshing, setScheduleRefreshing] = useState(false);
+  const [showDeals, setShowDeals] = useState(false);
 
   useEffect(() => {
     fetchProfile()
@@ -84,6 +85,9 @@ export default function App() {
         <button className="menu-button" aria-label="Menu">☰</button>
         <div className="toolbar-title">工具栏</div>
         <span className="toolbar-note">未来拓展 · 快速入口</span>
+        <button className="deals-toggle" onClick={() => setShowDeals(true)}>
+          Switch 折扣
+        </button>
       </div>
       <div className="hero-wrap">
         <HeroCard profile={profile} onRefresh={handleRefresh} />
@@ -110,10 +114,22 @@ export default function App() {
           )}
         </div>
       </div>
-      <DealsGrid />
       <div className="status-footer">
         数据加载完成 · {scheduleRefreshing ? '正在同步...' : '同步正常'}
       </div>
+      {showDeals && (
+        <div className="deals-panel-backdrop" onClick={() => setShowDeals(false)}>
+          <div className="deals-panel" onClick={(event) => event.stopPropagation()}>
+            <div className="deals-panel-header">
+              <h3>Switch 折扣速递</h3>
+              <button className="deals-panel-close" onClick={() => setShowDeals(false)}>
+                ×
+              </button>
+            </div>
+            <DealsGrid />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
