@@ -53,6 +53,32 @@ body::after {
   gap: 20px;
 }
 
+/* Wide screen: cards fully expanded, flex row, left-aligned */
+@media (min-width: 900px) {
+  #root {
+    max-width: none;
+    margin: 0;
+    padding: 40px 32px 60px 40px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 24px;
+  }
+  #root > .hero-wrap {
+    flex: 0 0 auto;
+    min-width: 320px;
+    max-width: 420px;
+  }
+  #root > .schedule-wrap {
+    flex: 0 1 auto;
+    min-width: 800px;
+    max-width: 520px;
+  }
+  #root > .status-footer {
+    flex: 0 0 100%;
+  }
+}
+
 .schedule-row-highlight {
   background: linear-gradient(135deg, rgba(62, 150, 255, 0.18), rgba(25, 39, 70, 0.85));
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -66,10 +92,36 @@ body::after {
   color: #addbff;
   font-size: 12px;
 }
+.schedule-label-only {
+  margin-left: 0;
+}
 
 .schedule-row-content .schedule-label {
   display: inline-block;
   margin-left: 8px;
+}
+
+/* Desktop: keep content and actions clearly separated, no text running into buttons */
+.schedule-cell {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.schedule-cell-date {
+  color: #7dd3ff;
+  font-weight: 600;
+  font-size: 16px;
+}
+.schedule-cell-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #f7f9ff;
+}
+.schedule-cell-note {
+  text-align: right;
+  color: #c7d6ff;
+  font-size: 14px;
 }
 
 @media (max-width: 420px) {
@@ -96,12 +148,10 @@ body::after {
     border-top: 1px solid rgba(255,255,255,0.06);
   }
 
-  .schedule-row-content .schedule-note {
+  .schedule-row-content .schedule-cell-note {
     margin-top: 4px;
-  }
-
-  .schedule-note {
-    text-align: left !important;
+    white-space: normal;
+    text-align: left;
   }
 }
 

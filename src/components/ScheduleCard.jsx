@@ -13,9 +13,9 @@ const cardStyle = {
 
 const rowStyle = {
   display: 'grid',
-  gridTemplateColumns: '1fr auto auto',
+  gridTemplateColumns: '1fr minmax(0, auto)',
   alignItems: 'center',
-  gap: 12,
+  gap: 16,
   padding: '14px 0',
   borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
   minHeight: 52,
@@ -23,10 +23,11 @@ const rowStyle = {
 
 const rowContentStyle = {
   display: 'grid',
-  gridTemplateColumns: '110px 1fr 90px',
+  gridTemplateColumns: '110px 1fr 100px',
   alignItems: 'center',
-  gap: 10,
+  gap: 12,
   minWidth: 0,
+  overflow: 'hidden',
 };
 
 export default function ScheduleCard({ schedule = [], onScheduleChange, refreshing = false }) {
@@ -171,17 +172,18 @@ export default function ScheduleCard({ schedule = [], onScheduleChange, refreshi
                   className={`schedule-row${item.highlight ? " schedule-row-highlight" : ""}`}
                 >
                   <div style={rowContentStyle} className="schedule-row-content">
-                    <Text strong style={{ color: '#7dd3ff', fontSize: 16 }}>
-                      {item.date}{item.label && (
-                        <span className="schedule-label">{item.label}</span>
-                      )}
-                    </Text>
-                    <Text style={{ fontSize: 16, fontWeight: 500 }} ellipsis>
+                    <span className="schedule-cell schedule-cell-date">
+                      {(item.label === '今天' || item.label === '明天')
+                        ? <span className="schedule-label schedule-label-only">{item.label}</span>
+                        : item.date
+                      }
+                    </span>
+                    <span className="schedule-cell schedule-cell-title" title={item.title}>
                       {item.title}
-                    </Text>
-                    <Text className="schedule-note" style={{ textAlign: 'right', color: '#c7d6ff' }}>
-                      {item.note}
-                    </Text>
+                    </span>
+                    <span className="schedule-cell schedule-cell-note" title={item.note || ''}>
+                      {item.note || '—'}
+                    </span>
                   </div>
                   <div className="schedule-row-actions" style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
                     <Button

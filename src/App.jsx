@@ -77,13 +77,17 @@ export default function App() {
 
   return (
     <>
-      <HeroCard profile={profile} onRefresh={handleRefresh} />
-      <ScheduleCard
-        schedule={upcoming}
-        onScheduleChange={refreshSchedule}
-        refreshing={scheduleRefreshing}
-      />
-      <div style={{ textAlign: 'center', fontSize: 16, color: 'rgba(255,255,255,0.5)' }}>
+      <div className="hero-wrap">
+        <HeroCard profile={profile} onRefresh={handleRefresh} />
+      </div>
+      <div className="schedule-wrap">
+        <ScheduleCard
+          schedule={upcoming}
+          onScheduleChange={refreshSchedule}
+          refreshing={scheduleRefreshing}
+        />
+      </div>
+      <div className="status-footer" style={{ textAlign: 'center', fontSize: 16, color: 'rgba(255,255,255,0.5)' }}>
         数据加载完成
       </div>
     </>
