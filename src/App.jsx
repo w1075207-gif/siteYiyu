@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Spin, message } from 'antd';
+import { Spin, message, Divider, Space } from 'antd';
 import HeroCard from './components/HeroCard';
 import ScheduleCard from './components/ScheduleCard';
 import { fetchProfile } from './api/profile';
@@ -11,6 +11,17 @@ function handleRefresh() {
     localStorage.removeItem('siteVersion');
   } catch (_) {}
   window.location.reload();
+}
+
+function InsightItem({ label, value, accent }) {
+  return (
+    <div className="insight-item">
+      <span className="insight-label" style={{ color: accent || '#4dd6ff' }}>
+        {label}
+      </span>
+      <p className="insight-value">{value}</p>
+    </div>
+  );
 }
 
 export default function App() {
@@ -36,17 +47,17 @@ export default function App() {
 
   if (loading) {
     return (
-      <div style={{ textAlign: 'center', padding: 60 }}>
+      <div className="page-loading">
         <Spin size="large" />
-        <p style={{ marginTop: 16, color: '#9bb2ff' }}>初始化中...</p>
+        <p className="loading-text">初始化中...</p>
       </div>
     );
   }
 
   if (error || !data) {
     return (
-      <div style={{ textAlign: 'center', padding: 60, color: '#c7d6ff' }}>
-        无法获取配置，请稍后再试。
+      <div className="page-loading">
+        <p className="loading-text">无法获取配置，请稍后再试。</p>
       </div>
     );
   }
@@ -75,21 +86,64 @@ export default function App() {
       .finally(() => setScheduleRefreshing(false));
   };
 
+  const nextReminder = upcoming[0];
+  const insightItems = [
+    {
+      label: '下一条提醒',
+      value: nextReminder
+        ? `${nextReminder.date} · ${nextReminder.title}${nextReminder.note ? ` (${nextReminder.note})` : ''}`
+        : '暂无提醒',
+      accent: '#ffd166',
+    },
+    {
+      label: '心跳状态',
+      value: scheduleRefreshing ? '正在同步...' : '已同步（刷新可重跑）',
+      accent: '#4dd6ff',
+    },
+    {
+      label: '设计方向',
+      value: '冷峻科技 · Flow-driven',
+      accent: '#9dd0ff',
+    },
+  ];
+
   return (
-    <>
+    <div className="page-shell">
       <div className="hero-wrap">
         <HeroCard profile={profile} onRefresh={handleRefresh} />
       </div>
-      <div className="schedule-wrap">
-        <ScheduleCard
-          schedule={upcoming}
-          onScheduleChange={refreshSchedule}
-          refreshing={scheduleRefreshing}
-        />
+      <div className="main-grid">
+        <div className="schedule-col">
+          <ScheduleCard
+            schedule={upcoming}
+            onScheduleChange={refreshSchedule}
+            refreshing={scheduleRefreshing}
+          />
+        </div>
+        <div className="insight-col">
+          <div className="insight-card">
+            <p className="insight-heading">Flow Status</p>
+            <h3 className="insight-title">提醒流动线索</h3>
+            <Divider className="insight-divider" />
+            <div className="insight-list">
+              {insightItems.map((item) => (
+                <InsightItem
+                  key={item.label}
+                  label={item.label}
+                  value={item.value}
+                  accent={item.accent}
+                />
+              ))}
+            </div>
+            <div className="insight-footer">
+              <span>智能提醒 · 线性流程 · 霓虹动效</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="status-footer" style={{ textAlign: 'center', fontSize: 16, color: 'rgba(255,255,255,0.5)' }}>
-        数据加载完成
+      <div className="status-footer">
+        数据加载完成 · {scheduleRefreshing ? '正在同步...' : '同步正常'}
       </div>
-    </>
+    </div>
   );
 }

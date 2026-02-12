@@ -9,188 +9,216 @@ body {
   height: 100%;
 }
 
-:root {
-  --safe-top: env(safe-area-inset-top, 24px);
-}
-
 body {
-  font-family: "Noto Sans SC", "Inter", system-ui, sans-serif;
-  color: #f7f9ff;
+  font-family: 'Space Grotesk', 'Noto Sans SC', system-ui, sans-serif;
+  background: radial-gradient(circle at top, #0a1630 0%, #03060e 55%, #010205 100%);
+  color: #f8fbff;
   min-height: 100vh;
-  position: relative;
-  padding-top: calc(var(--safe-top) + 8px);
-  background: radial-gradient(circle at top, #101d42 0%, #05060a 60%);
+  padding: 32px 20px 60px;
 }
 
 body::before {
-  content: "";
+  content: '';
   position: fixed;
   inset: 0;
-  background:
-    radial-gradient(circle at top, rgba(16, 29, 66, 0.9), rgba(8, 9, 12, 0.95)),
-    linear-gradient(180deg, rgba(8, 9, 12, 0.45) 0%, rgba(5, 6, 10, 0.85) 70%, rgba(5, 6, 10, 0.95) 100%);
+  background: radial-gradient(circle at 20% 0%, rgba(77, 214, 255, 0.15), transparent 55%);
+  opacity: 0.8;
   z-index: -2;
 }
 
 body::after {
-  content: "";
+  content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: calc(var(--safe-top) + 48px);
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent);
-  pointer-events: none;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(4, 6, 12, 0.9), rgba(5, 6, 10, 0.96));
   z-index: -1;
 }
 
 #root {
-  padding: 40px 20px 60px;
-  max-width: 480px;
+  max-width: 1200px;
   margin: 0 auto;
+}
+
+.page-shell {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
-/* Wide screen: cards fully expanded, flex row, left-aligned */
-@media (min-width: 900px) {
-  #root {
-    max-width: none;
-    margin: 0;
-    padding: 40px 32px 60px 40px;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 24px;
-  }
-  #root > .hero-wrap {
-    flex: 0 0 auto;
-    min-width: 320px;
-    max-width: 420px;
-  }
-  #root > .schedule-wrap {
-    flex: 0 1 auto;
-    min-width: 800px;
-    max-width: 520px;
-  }
-  #root > .status-footer {
-    flex: 0 0 100%;
-  }
+.hero-wrap,
+.schedule-wrap,
+.status-footer {
+  width: 100%;
 }
 
-.schedule-row-highlight {
-  background: linear-gradient(135deg, rgba(62, 150, 255, 0.18), rgba(25, 39, 70, 0.85));
-  border: 1px solid rgba(255, 255, 255, 0.2);
+.hero-wrap {
+  animation: fadeInUp 0.8s ease-out both;
 }
 
-.schedule-label {
-  margin-left: 8px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.15);
-  color: #addbff;
-  font-size: 12px;
-}
-.schedule-label-only {
-  margin-left: 0;
+.main-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
 }
 
-.schedule-row-content .schedule-label {
-  display: inline-block;
-  margin-left: 8px;
+.schedule-col {
+  animation: fadeInUp 0.7s ease-out both;
 }
 
-/* Desktop: keep content and actions clearly separated, no text running into buttons */
-.schedule-cell {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.insight-col {
+  animation: fadeInUp 0.9s ease-out both;
 }
-.schedule-cell-date {
-  color: #7dd3ff;
-  font-weight: 600;
-  font-size: 16px;
-}
-.schedule-cell-title {
-  font-size: 16px;
-  font-weight: 500;
-  color: #f7f9ff;
-}
-.schedule-cell-note {
-  text-align: right;
-  color: #c7d6ff;
-  font-size: 14px;
-}
-
-@media (max-width: 420px) {
-  #root {
-    padding: 30px 16px 60px;
-  }
-
-  .schedule-row {
-    grid-template-columns: 1fr !important;
-    grid-template-rows: auto auto;
-    gap: 10px !important;
-    text-align: left;
-  }
-
-  .schedule-row-content {
-    grid-template-columns: 1fr !important;
-    order: 1;
-  }
-
-  .schedule-row .schedule-row-actions {
-    order: 2;
-    justify-content: flex-start;
-    padding-top: 4px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-  }
-
-  .schedule-row-content .schedule-cell-note {
-    margin-top: 4px;
-    white-space: normal;
-    text-align: left;
-  }
-}
-
 
 .component-card {
-  border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
-  background: radial-gradient(circle at 30% -20%, rgba(56, 152, 255, 0.12), rgba(4, 6, 12, 0.95));
-  backdrop-filter: blur(18px);
+  background: rgba(5, 8, 16, 0.7);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 30px 65px rgba(3, 4, 7, 0.7);
+  backdrop-filter: blur(22px);
 }
+
 .hero-card {
   padding: 32px !important;
+  border: none;
 }
+
 .schedule-card {
   padding: 28px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 420px;
 }
-.status-card {
-  padding: 20px 30px;
+
+.status-footer {
+  text-align: center;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.6);
 }
-.component-modal .ant-modal-content {
-  background: linear-gradient(180deg, rgba(9, 18, 40, 0.9), rgba(5, 6, 10, 0.95));
-  border-radius: 20px;
-  color: #f7f9ff;
+
+.insight-card {
+  padding: 28px;
+  background: linear-gradient(180deg, rgba(13, 19, 34, 0.9), rgba(6, 8, 15, 0.95));
+  border-radius: 24px;
+  border: 1px solid rgba(77, 214, 255, 0.2);
+  box-shadow: 0 25px 60px rgba(2, 4, 10, 0.7);
 }
-.schedule-row-highlight {
-  background: linear-gradient(135deg, rgba(62, 150, 255, 0.18), rgba(25, 39, 70, 0.95));
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-.schedule-label {
-  margin-left: 8px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.15);
-  color: #addbff;
+
+.insight-heading {
   font-size: 12px;
-  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: #62c4ff;
+  margin-bottom: 4px;
 }
-.section-header {
+
+.insight-title {
+  font-size: 24px;
+  color: #f8fbff;
+  margin-bottom: 12px;
+}
+
+.insight-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 20px;
+}
+
+.insight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.insight-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.insight-label {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.insight-value {
   font-size: 18px;
-  margin-bottom: 16px;
+  color: #f8fbff;
+  line-height: 1.4;
+}
+
+.insight-footer {
+  margin-top: 24px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.schedule-row-highlight {
+  background: linear-gradient(135deg, rgba(77, 214, 255, 0.2), rgba(14, 29, 62, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.schedule-cell-date {
+  font-size: 16px;
+  font-weight: 600;
+  color: #7dd3ff;
+}
+
+.schedule-row-content {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.schedule-row:hover .schedule-row-content {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+}
+
+.schedule-row-actions button {
+  color: #9bb2ff;
+}
+
+.status-footer {
+  letter-spacing: 0.2em;
+}
+
+.page-loading {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  color: #9bb2ff;
+}
+
+.loading-text {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 900px) {
+  body {
+    padding: 48px 60px 80px;
+  }
+
+  .page-shell {
+    gap: 32px;
+  }
+
+  .main-grid {
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: flex-start;
+  }
+
+  .status-footer {
+    text-align: right;
+  }
 }
