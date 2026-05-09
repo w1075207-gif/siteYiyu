@@ -428,7 +428,7 @@ export default function ShaneHairstudio() {
             <div className="shane-inner">
               <div className="shane-about-grid">
                 <div className="shane-about-img">
-                  <img src={ABOUT_IMG} alt="藝流造型團隊" loading="lazy" />
+                  <img src={ABOUT_IMG} alt="藝流造型 Hair Studio 設計師於門店前合影" loading="lazy" />
                 </div>
                 <div className="shane-about-text">
                   <h2>關於 藝流造型 Hair Studio</h2>
