@@ -537,7 +537,7 @@ export default function ShaneHairstudio() {
                   <p>
                     我們相信溝通是美髮的第一步。設計師會依您的生活型態、整理習慣與喜好，給出最實在的建議，讓髮型好整理、耐看又顯氣質。
                   </p>
-                  <img src={TEAM_IMG} alt="門店服務情境" loading="lazy" />
+                  <img src={TEAM_IMG} alt="專業團隊：設計師專注為顧客服務" loading="lazy" />
                 </div>
                 <div className="shane-env-block">
                   <h3>精緻環境 · 品味體驗</h3>
