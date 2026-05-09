@@ -19,6 +19,11 @@ const MAPS_URL =
 const MAPS_EMBED =
   'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3113.214!2d-9.136875400000001!3d38.726738899999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19333796b3ec81%3A0x9e55a011962cd8f8!2sShane\'s%20HairStudio%E3%80%8CAsian%E3%80%8D!5e0!3m2!1sen!2spt!4v1715000000000!5m2!1sen!2spt';
 
+const WHATSAPP_URL = 'https://wa.me/351912345678';
+const WHATSAPP_DISPLAY = '+351 912 345 678';
+const INSTAGRAM_URL = 'https://www.instagram.com/shanehairstudio/';
+const INSTAGRAM_HANDLE = 'shanehairstudio';
+
 /** Local assets under public/shane/site (synced to shanehairstudioSite repo) */
 const IMG = (name) => `/shane/site/${name}`;
 
@@ -591,10 +596,6 @@ export default function ShaneHairstudio() {
                     Rua dos Anjos 6A<br />
                     1150-191 Lisboa, Portugal
                   </p>
-                  <h4 style={{ marginTop: 20 }}>電話</h4>
-                  <p>
-                    <a href="tel:+351912345678">+351 912 345 678</a>
-                  </p>
                   <h4 style={{ marginTop: 20 }}>營業時間</h4>
                   <p>
                     週二至週六 11:00 – 20:00<br />
@@ -618,15 +619,26 @@ export default function ShaneHairstudio() {
                       Google 地圖導航
                     </a>
                   </p>
-                  <h4 style={{ marginTop: 20 }}>Line / WhatsApp</h4>
+                  <h4 style={{ marginTop: 20 }}>聯絡方式</h4>
                   <p>
-                    <a href="https://wa.me/351912345678" target="_blank" rel="noopener noreferrer">+351 912 345 678</a>
+                    WhatsApp：{' '}
+                    <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                      {WHATSAPP_DISPLAY}
+                    </a>
                   </p>
-                  <h4 style={{ marginTop: 20 }}>追蹤我們</h4>
-                  <div className="shane-social">
-                    <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">FB</a>
-                    <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
-                    <a href="https://wa.me/351912345678" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">WA</a>
+                  <p style={{ marginTop: 8 }}>
+                    Instagram：{' '}
+                    <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+                      @{INSTAGRAM_HANDLE}
+                    </a>
+                  </p>
+                  <div className="shane-social" style={{ marginTop: 16 }}>
+                    <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Instagram @shanehairstudio">
+                      IG
+                    </a>
+                    <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" aria-label={`WhatsApp ${WHATSAPP_DISPLAY}`}>
+                      WA
+                    </a>
                   </div>
                 </div>
               </div>
@@ -642,16 +654,25 @@ export default function ShaneHairstudio() {
             <div className="shane-foot-grid">
               <div className="shane-foot-brand">藝流造型 Hair Studio</div>
               <div className="shane-foot-mid">
-                電話：<a href="tel:+351912345678" style={{ color: ORANGE }}>+351 912 345 678</a>
+                WhatsApp：{' '}
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" style={{ color: ORANGE }}>
+                  {WHATSAPP_DISPLAY}
+                </a>
                 <br />
-                信箱：<a href="mailto:info@hairstudio.pt" style={{ color: ORANGE }}>info@hairstudio.pt</a>
+                Instagram：{' '}
+                <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" style={{ color: ORANGE }}>
+                  @{INSTAGRAM_HANDLE}
+                </a>
                 <br />
                 Rua dos Anjos 6A, 1150-191 Lisboa
               </div>
               <div style={{ justifySelf: 'end' }} className="shane-social">
-                <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">FB</a>
-                <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
-                <a href="https://wa.me/351912345678" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">WA</a>
+                <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Instagram @shanehairstudio">
+                  IG
+                </a>
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" aria-label={`WhatsApp ${WHATSAPP_DISPLAY}`}>
+                  WA
+                </a>
               </div>
             </div>
             <p className="shane-foot-copy">© {new Date().getFullYear()} 藝流造型 Hair Studio. All Rights Reserved.</p>
