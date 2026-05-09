@@ -35,8 +35,9 @@ const GALLERY_IMGS = [
 
 const ABOUT_IMG = IMG('about-salon.png');
 const TEAM_IMG = IMG('team-work.png');
-const ENV_IMG1 = IMG('env-whisky.png');
-const ENV_IMG2 = IMG('env-mask.png');
+const ENV_IMG1 = IMG('env-01.png');
+const ENV_IMG2 = IMG('env-02.png');
+const ENV_IMG3 = IMG('env-03.png');
 
 const CSS = `
   .shane-root * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -254,7 +255,17 @@ const CSS = `
   .shane-env-block h3 { font-size: 1.1rem; margin-bottom: 12px; color: ${TEXT}; }
   .shane-env-block p { font-size: 0.88rem; color: ${TEXT_MUTED}; line-height: 1.75; margin-bottom: 16px; }
   .shane-env-block img { width: 100%; border-radius: 10px; border: 1px solid ${BORDER}; }
-  .shane-env-imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .shane-env-imgs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .shane-env-imgs img {
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    height: auto;
+    display: block;
+  }
 
   /* Contact */
   .shane-contact-grid {
@@ -347,6 +358,7 @@ const CSS = `
   }
   @media (max-width: 520px) {
     .shane-svc-grid { grid-template-columns: 1fr; }
+    .shane-env-imgs { grid-template-columns: 1fr; }
     .shane-gal-grid img {
       width: 100px;
       min-width: 100px;
@@ -545,8 +557,21 @@ export default function ShaneHairstudio() {
                     門店空間以深色基調搭配溫暖燈光，讓您從進店到完成造型都能放鬆享受。每個角落都經過用心佈置，呈現沙龍級質感。
                   </p>
                   <div className="shane-env-imgs">
-                    <img src={ENV_IMG1} alt="門店環境一" loading="lazy" />
-                    <img src={ENV_IMG2} alt="門店環境二" loading="lazy" />
+                    <img
+                      src={ENV_IMG1}
+                      alt="沙龍空間裝飾：精緻面具與暖色燈光下的質感陳列"
+                      loading="lazy"
+                    />
+                    <img
+                      src={ENV_IMG2}
+                      alt="門店牆面展示：華麗面具與羽毛飾品營造藝術氛圍"
+                      loading="lazy"
+                    />
+                    <img
+                      src={ENV_IMG3}
+                      alt="休息區陳列：精選酒款與幾何鏡面裝飾的品味角落"
+                      loading="lazy"
+                    />
                   </div>
                 </div>
               </div>
