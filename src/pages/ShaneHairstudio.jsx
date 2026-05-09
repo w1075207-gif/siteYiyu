@@ -213,17 +213,41 @@ const CSS = `
   }
   .shane-stat strong { display: block; color: ${ORANGE}; font-size: 1.05rem; margin-bottom: 4px; }
 
-  /* Gallery */
+  /* Gallery – compact row of 6 thumbnails (reference layout) */
+  #gallery.shane-sec {
+    background: #000000;
+  }
   .shane-gal-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(10px, 2vw, 18px);
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: clamp(8px, 1.2vw, 14px);
+    max-width: min(920px, 100%);
+    margin: 0 auto;
   }
   .shane-gal-grid img {
-    width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 10px;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 8px;
     border: 1px solid ${BORDER};
+    display: block;
   }
-  .shane-gal-more { text-align: center; margin-top: 36px; }
-  .shane-gal-more a { display: inline-block; border: 2px solid ${ORANGE}; color: ${ORANGE}; padding: 12px 32px; border-radius: 4px; font-weight: 700; text-decoration: none; }
-  .shane-gal-more a:hover { background: rgba(255,122,26,0.12); }
+  .shane-gal-more { text-align: center; margin-top: 32px; }
+  .shane-gal-more a {
+    display: inline-block;
+    border: 2px solid ${ORANGE};
+    color: #fff;
+    background: transparent;
+    padding: 11px 28px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    text-decoration: none;
+  }
+  .shane-gal-more a:hover {
+    background: rgba(255, 127, 0, 0.15);
+    color: #fff;
+  }
 
   /* Environment */
   .shane-env-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 40px); }
@@ -273,6 +297,10 @@ const CSS = `
     .shane-map iframe { height: 260px; }
     .shane-foot-grid { grid-template-columns: 1fr; text-align: center; }
     .shane-foot-grid .shane-social { justify-content: center; }
+    .shane-gal-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      max-width: min(520px, 100%);
+    }
   }
   @media (max-width: 900px) {
     .shane-nav-links { display: none; position: fixed; top: 72px; left: 0; right: 0;
@@ -284,7 +312,25 @@ const CSS = `
     .shane-burger { display: flex; }
     .shane-about-grid { grid-template-columns: 1fr; }
     .shane-env-grid { grid-template-columns: 1fr; }
-    .shane-gal-grid { grid-template-columns: repeat(2, 1fr); }
+    .shane-gal-grid {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 10px;
+      max-width: 100%;
+      overflow-x: auto;
+      padding: 4px 4px 12px;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x proximity;
+      justify-content: flex-start;
+    }
+    .shane-gal-grid img {
+      width: 108px;
+      min-width: 108px;
+      height: 135px;
+      aspect-ratio: auto;
+      scroll-snap-align: start;
+    }
     .shane-hero {
       grid-template-columns: 1fr;
       min-height: auto;
@@ -301,7 +347,11 @@ const CSS = `
   }
   @media (max-width: 520px) {
     .shane-svc-grid { grid-template-columns: 1fr; }
-    .shane-gal-grid { grid-template-columns: 1fr; }
+    .shane-gal-grid img {
+      width: 100px;
+      min-width: 100px;
+      height: 125px;
+    }
     .shane-hero-pin { right: 12px; bottom: 12px; font-size: 0.72rem; padding: 8px 10px; }
     .shane-hero-photo { min-height: 38vh; }
   }
