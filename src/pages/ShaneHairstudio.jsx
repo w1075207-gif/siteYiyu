@@ -22,8 +22,7 @@ const MAPS_EMBED =
 /** Local assets under public/shane/site (synced to shanehairstudioSite repo) */
 const IMG = (name) => `/shane/site/${name}`;
 
-const HERO_BG = IMG('hero-stylist.png');
-const HERO_STOREFRONT = IMG('storefront.png');
+const HERO_BG = IMG('hero-vw-storefront.png');
 
 const GALLERY_IMGS = [
   IMG('gallery-01.png'),
@@ -96,17 +95,42 @@ const CSS = `
   }
   .shane-hero-bg {
     position: absolute; inset: 0;
-    background: url(${HERO_BG}) center/cover no-repeat;
+    background-image: url(${HERO_BG});
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 72% center;
   }
   .shane-hero-overlay {
     position: absolute; inset: 0;
-    background: linear-gradient(90deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.35) 100%);
+    pointer-events: none;
+    /* Strong read zone on the left; photo stays vivid on the right */
+    background: linear-gradient(
+      90deg,
+      rgba(6, 6, 10, 0.97) 0%,
+      rgba(6, 6, 10, 0.88) 18%,
+      rgba(6, 6, 10, 0.55) 40%,
+      rgba(6, 6, 10, 0.18) 62%,
+      rgba(0, 0, 0, 0) 78%
+    );
   }
-  .shane-hero-store {
-    position: absolute; z-index: 2; right: clamp(12px, 4vw, 40px); bottom: clamp(88px, 14vh, 140px);
-    width: min(220px, 32vw); height: auto; border-radius: 10px;
-    border: 2px solid rgba(255,122,26,0.65); box-shadow: 0 12px 40px rgba(0,0,0,0.55);
-    object-fit: cover;
+  .shane-hero-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    right: 38%;
+    opacity: 0.22;
+    background: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.07) 1px, transparent 0);
+    background-size: 22px 38px;
+    mask-image: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.35) 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.35) 70%, transparent 100%);
+  }
+  .shane-hero-inner .shane-btn-outline {
+    border-color: rgba(255, 255, 255, 0.82);
+    color: #fff;
+  }
+  .shane-hero-inner .shane-btn-outline:hover {
+    border-color: ${ORANGE};
+    color: ${ORANGE};
   }
   .shane-hero-inner {
     position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: clamp(32px, 6vw, 80px) clamp(20px, 4vw, 48px);
@@ -117,6 +141,10 @@ const CSS = `
     line-height: 1.2; margin-bottom: 12px; letter-spacing: 0.04em;
   }
   .shane-hero-sub { font-size: clamp(1rem, 2.2vw, 1.25rem); color: ${TEXT}; margin-bottom: 16px; font-weight: 500; }
+  .shane-hero-lead {
+    max-width: 420px; color: rgba(255,255,255,0.92); font-size: 0.98rem; font-weight: 600;
+    letter-spacing: 0.06em; margin-bottom: 14px;
+  }
   .shane-hero-desc { max-width: 420px; color: ${TEXT_MUTED}; font-size: 0.95rem; line-height: 1.75; margin-bottom: 28px; }
   .shane-hero-btns { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: clamp(32px, 8vh, 72px); }
   .shane-btn-solid {
@@ -261,7 +289,7 @@ const CSS = `
     .shane-svc-grid { grid-template-columns: 1fr; }
     .shane-gal-grid { grid-template-columns: 1fr; }
     .shane-hero-pin { position: relative; right: auto; bottom: auto; margin-top: 24px; align-self: flex-start; }
-    .shane-hero-store { display: none; }
+    .shane-hero-bg { background-position: 70% center; }
   }
 `;
 
@@ -345,10 +373,10 @@ export default function ShaneHairstudio() {
           <header className="shane-hero" id="home">
             <div className="shane-hero-bg" aria-hidden />
             <div className="shane-hero-overlay" aria-hidden />
-            <img className="shane-hero-store" src={HERO_STOREFRONT} alt="門店外觀" loading="eager" />
             <div className="shane-hero-inner">
               <h1 className="shane-hero-title">藝流造型 Hair Studio</h1>
               <p className="shane-hero-sub">專業剪髮 · 染髮 · 燙髮 · 造型</p>
+              <p className="shane-hero-lead">專屬設計 × 型格風格 × 頂級服務</p>
               <p className="shane-hero-desc">
                 坐落於里斯本 Anjos 區，為您帶來亞洲美髮專業與細緻服務。我們注重每位顧客的風格與日常打理，讓您在異鄉也能擁有熟悉的好髮型。
               </p>
