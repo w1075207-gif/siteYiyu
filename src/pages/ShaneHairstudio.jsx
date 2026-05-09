@@ -22,7 +22,7 @@ const MAPS_EMBED =
 /** Local assets under public/shane/site (synced to shanehairstudioSite repo) */
 const IMG = (name) => `/shane/site/${name}`;
 
-const HERO_BG = IMG('hero-vw-storefront.png');
+const HERO_BG = IMG('hero-vw-panorama.png');
 
 const GALLERY_IMGS = [
   IMG('gallery-01.png'),
@@ -88,41 +88,46 @@ const CSS = `
   .shane-burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; }
   .shane-burger span { width: 22px; height: 2px; background: #fff; border-radius: 1px; }
 
-  /* Hero */
+  /* Hero: left 1/3 copy + right 2/3 photo (gradient blends at the seam) */
   .shane-hero {
-    min-height: 100vh; padding-top: 72px; position: relative;
-    display: flex; align-items: stretch;
+    padding-top: 72px;
+    min-height: calc(100dvh - 72px);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    align-items: stretch;
+    width: 100%;
   }
-  .shane-hero-bg {
-    position: absolute; inset: 0;
+  .shane-hero-inner {
+    position: relative;
+    z-index: 2;
+    padding: clamp(28px, 5vw, 64px) clamp(18px, 2.8vw, 36px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #060608;
+    background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.055) 1px, transparent 0);
+    background-size: 22px 38px;
+    border-right: 1px solid ${BORDER};
+  }
+  .shane-hero-photo {
+    position: relative;
+    min-height: 280px;
     background-image: url(${HERO_BG});
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: 72% center;
+    background-position: 52% center;
   }
-  .shane-hero-overlay {
-    position: absolute; inset: 0;
-    pointer-events: none;
-    /* Strong read zone on the left; photo stays vivid on the right */
-    background: linear-gradient(
-      90deg,
-      rgba(6, 6, 10, 0.97) 0%,
-      rgba(6, 6, 10, 0.88) 18%,
-      rgba(6, 6, 10, 0.55) 40%,
-      rgba(6, 6, 10, 0.18) 62%,
-      rgba(0, 0, 0, 0) 78%
-    );
-  }
-  .shane-hero-overlay::before {
-    content: '';
+  .shane-hero-photoGrad {
     position: absolute;
     inset: 0;
-    right: 38%;
-    opacity: 0.22;
-    background: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.07) 1px, transparent 0);
-    background-size: 22px 38px;
-    mask-image: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.35) 70%, transparent 100%);
-    -webkit-mask-image: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.35) 70%, transparent 100%);
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      rgba(6, 6, 10, 0.94) 0%,
+      rgba(6, 6, 10, 0.55) 18%,
+      rgba(6, 6, 10, 0.15) 42%,
+      rgba(0, 0, 0, 0) 68%
+    );
   }
   .shane-hero-inner .shane-btn-outline {
     border-color: rgba(255, 255, 255, 0.82);
@@ -132,21 +137,17 @@ const CSS = `
     border-color: ${ORANGE};
     color: ${ORANGE};
   }
-  .shane-hero-inner {
-    position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: clamp(32px, 6vw, 80px) clamp(20px, 4vw, 48px);
-    display: flex; flex-direction: column; justify-content: center; flex: 1;
-  }
   .shane-hero-title {
-    font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 700; color: ${ORANGE};
+    font-size: clamp(1.65rem, 3.2vw, 2.6rem); font-weight: 700; color: ${ORANGE};
     line-height: 1.2; margin-bottom: 12px; letter-spacing: 0.04em;
   }
-  .shane-hero-sub { font-size: clamp(1rem, 2.2vw, 1.25rem); color: ${TEXT}; margin-bottom: 16px; font-weight: 500; }
+  .shane-hero-sub { font-size: clamp(0.95rem, 1.8vw, 1.15rem); color: ${TEXT}; margin-bottom: 14px; font-weight: 600; }
   .shane-hero-lead {
-    max-width: 420px; color: rgba(255,255,255,0.92); font-size: 0.98rem; font-weight: 600;
-    letter-spacing: 0.06em; margin-bottom: 14px;
+    color: rgba(255,255,255,0.92); font-size: clamp(0.82rem, 1.4vw, 0.95rem); font-weight: 600;
+    letter-spacing: 0.04em; margin-bottom: 12px;
   }
-  .shane-hero-desc { max-width: 420px; color: ${TEXT_MUTED}; font-size: 0.95rem; line-height: 1.75; margin-bottom: 28px; }
-  .shane-hero-btns { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: clamp(32px, 8vh, 72px); }
+  .shane-hero-desc { color: ${TEXT_MUTED}; font-size: clamp(0.82rem, 1.35vw, 0.92rem); line-height: 1.7; margin-bottom: 22px; }
+  .shane-hero-btns { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: clamp(22px, 4vh, 40px); }
   .shane-btn-solid {
     background: ${ORANGE}; color: #fff; padding: 14px 28px; border-radius: 4px;
     font-weight: 700; text-decoration: none; font-size: 0.95rem; border: 2px solid ${ORANGE};
@@ -156,17 +157,17 @@ const CSS = `
     padding: 12px 26px; border-radius: 4px; font-weight: 700; text-decoration: none; font-size: 0.95rem;
   }
   .shane-hero-features {
-    display: flex; flex-wrap: wrap; gap: clamp(16px, 4vw, 40px);
+    display: flex; flex-wrap: wrap; gap: clamp(12px, 2.5vw, 24px);
   }
-  .shane-hero-feat { display: flex; align-items: center; gap: 10px; color: ${TEXT}; font-size: 0.88rem; }
+  .shane-hero-feat { display: flex; align-items: center; gap: 10px; color: ${TEXT}; font-size: 0.82rem; }
   .shane-hero-feat-icon {
-    width: 40px; height: 40px; border-radius: 50%; border: 1px solid ${ORANGE};
-    display: flex; align-items: center; justify-content: center; color: ${ORANGE}; font-size: 1.1rem;
+    width: 38px; height: 38px; border-radius: 50%; border: 1px solid ${ORANGE};
+    display: flex; align-items: center; justify-content: center; color: ${ORANGE}; font-size: 1rem;
   }
   .shane-hero-pin {
-    position: absolute; right: clamp(16px, 4vw, 40px); bottom: clamp(24px, 5vh, 48px); z-index: 3;
-    background: rgba(0,0,0,0.75); border: 1px solid ${BORDER}; padding: 12px 16px; border-radius: 6px;
-    font-size: 0.8rem; color: ${TEXT}; display: flex; align-items: center; gap: 8px;
+    position: absolute; right: clamp(12px, 2.5vw, 28px); bottom: clamp(16px, 3vh, 32px); z-index: 3;
+    background: rgba(0,0,0,0.78); border: 1px solid ${BORDER}; padding: 10px 14px; border-radius: 6px;
+    font-size: 0.78rem; color: ${TEXT}; display: flex; align-items: center; gap: 8px;
   }
 
   /* Section */
@@ -284,12 +285,25 @@ const CSS = `
     .shane-about-grid { grid-template-columns: 1fr; }
     .shane-env-grid { grid-template-columns: 1fr; }
     .shane-gal-grid { grid-template-columns: repeat(2, 1fr); }
+    .shane-hero {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+    .shane-hero-inner {
+      border-right: none;
+      border-bottom: 1px solid ${BORDER};
+      padding-bottom: 36px;
+    }
+    .shane-hero-photo {
+      min-height: 46vh;
+      background-position: center;
+    }
   }
   @media (max-width: 520px) {
     .shane-svc-grid { grid-template-columns: 1fr; }
     .shane-gal-grid { grid-template-columns: 1fr; }
-    .shane-hero-pin { position: relative; right: auto; bottom: auto; margin-top: 24px; align-self: flex-start; }
-    .shane-hero-bg { background-position: 70% center; }
+    .shane-hero-pin { right: 12px; bottom: 12px; font-size: 0.72rem; padding: 8px 10px; }
+    .shane-hero-photo { min-height: 38vh; }
   }
 `;
 
@@ -371,8 +385,6 @@ export default function ShaneHairstudio() {
           </nav>
 
           <header className="shane-hero" id="home">
-            <div className="shane-hero-bg" aria-hidden />
-            <div className="shane-hero-overlay" aria-hidden />
             <div className="shane-hero-inner">
               <h1 className="shane-hero-title">藝流造型 Hair Studio</h1>
               <p className="shane-hero-sub">專業剪髮 · 染髮 · 燙髮 · 造型</p>
@@ -399,9 +411,12 @@ export default function ShaneHairstudio() {
                 </div>
               </div>
             </div>
-            <div className="shane-hero-pin">
-              <span aria-hidden>📍</span>
-              <span>Anjos, Lisboa, Portugal</span>
+            <div className="shane-hero-photo">
+              <div className="shane-hero-photoGrad" aria-hidden />
+              <div className="shane-hero-pin">
+                <span aria-hidden>📍</span>
+                <span>Anjos, Lisboa, Portugal</span>
+              </div>
             </div>
           </header>
 
