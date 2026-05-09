@@ -1,4 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  MESSAGES,
+  SHANE_HTML_LANG,
+  SHANE_LOCALES,
+  detectInitialLocale,
+  writeSavedLocale,
+} from './shaneHairstudio.i18n.js';
 
 /**
  * Client mockups are visual specifications only. This page is built with real
@@ -93,6 +100,27 @@ const CSS = `
   .shane-nav-cta:hover { filter: brightness(1.08); }
   .shane-burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; }
   .shane-burger span { width: 22px; height: 2px; background: #fff; border-radius: 1px; }
+  .shane-nav-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .shane-lang { display: flex; align-items: center; gap: 4px; }
+  .shane-lang-btn {
+    padding: 6px 8px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    border: 1px solid ${BORDER};
+    background: rgba(0,0,0,0.35);
+    color: ${TEXT_MUTED};
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    line-height: 1.2;
+  }
+  .shane-lang-btn:hover { color: ${ORANGE}; border-color: rgba(255,127,0,0.45); }
+  .shane-lang-btn[aria-pressed="true"] {
+    color: #fff;
+    border-color: ${ORANGE};
+    background: rgba(255,127,0,0.2);
+  }
 
   /* Hero: left 1/3 copy + right 2/3 photo (gradient blends at the seam) */
   .shane-hero {
@@ -374,36 +402,31 @@ const CSS = `
   }
 `;
 
-const services = [
-  {
-    icon: '✂',
-    title: '剪髮',
-    desc: '專業剪裁與層次設計，打造最適合臉型的髮型輪廓。',
-    href: '#contact',
-  },
-  {
-    icon: '◐',
-    title: '染髮',
-    desc: '時尚色系與質感呈現，使用國際品牌產品呵護髮絲。',
-    href: '#contact',
-  },
-  {
-    icon: '◎',
-    title: '燙髮',
-    desc: '數碼燙與造型燙，自然捲度與持久線條一次到位。',
-    href: '#contact',
-  },
-  {
-    icon: '☇',
-    title: '造型',
-    desc: '日常打理到重要場合，完整造型與護理建議。',
-    href: '#contact',
-  },
-];
-
 export default function ShaneHairstudio() {
+  const [lang, setLang] = useState(() => detectInitialLocale());
+  const t = MESSAGES[lang];
+  const colon = lang === 'zh' ? '：' : ': ';
   const menuRef = useRef(null);
   const burgerRef = useRef(null);
+
+  const services = useMemo(
+    () => [
+      { icon: '✂', title: t.svcCut, desc: t.svcCutDesc, href: '#contact' },
+      { icon: '◐', title: t.svcColor, desc: t.svcColorDesc, href: '#contact' },
+      { icon: '◎', title: t.svcPerm, desc: t.svcPermDesc, href: '#contact' },
+      { icon: '☇', title: t.svcStyle, desc: t.svcStyleDesc, href: '#contact' },
+    ],
+    [t],
+  );
+
+  useEffect(() => {
+    document.documentElement.lang = SHANE_HTML_LANG[lang] || 'en';
+  }, [lang]);
+
+  const pickLang = (next) => {
+    writeSavedLocale(next);
+    setLang(next);
+  };
 
   useEffect(() => {
     const menu = menuRef.current;
@@ -430,22 +453,36 @@ export default function ShaneHairstudio() {
       <style>{CSS}</style>
       <div className="shane-root shane-honey">
         <div className="shane-z1">
-          <nav className="shane-nav" aria-label="主選單">
+          <nav className="shane-nav" aria-label={t.navAria}>
             <a className="shane-brand" href="#home">
               藝流造型
               <small>Hair Studio</small>
             </a>
             <ul className="shane-nav-links" ref={menuRef}>
-              <li><a href="#home">首頁</a></li>
-              <li><a href="#about">關於我們</a></li>
-              <li><a href="#services">服務項目</a></li>
-              <li><a href="#gallery">作品展示</a></li>
-              <li><a href="#environment">門店環境</a></li>
-              <li><a href="#contact">聯絡我們</a></li>
+              <li><a href="#home">{t.navHome}</a></li>
+              <li><a href="#about">{t.navAbout}</a></li>
+              <li><a href="#services">{t.navServices}</a></li>
+              <li><a href="#gallery">{t.navGallery}</a></li>
+              <li><a href="#environment">{t.navEnvironment}</a></li>
+              <li><a href="#contact">{t.navContact}</a></li>
             </ul>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <a className="shane-nav-cta" href="#contact">立即預約</a>
-              <button type="button" className="shane-burger" aria-label="開啟選單" ref={burgerRef}>
+            <div className="shane-nav-actions">
+              <div className="shane-lang" role="group" aria-label={t.langGroupAria}>
+                {SHANE_LOCALES.map((code) => (
+                  <button
+                    key={code}
+                    type="button"
+                    className="shane-lang-btn"
+                    aria-pressed={lang === code}
+                    aria-label={code === 'zh' ? t.langZhAria : code === 'en' ? t.langEnAria : t.langPtAria}
+                    onClick={() => pickLang(code)}
+                  >
+                    {code === 'zh' ? '中文' : code.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+              <a className="shane-nav-cta" href="#contact">{t.navCta}</a>
+              <button type="button" className="shane-burger" aria-label={t.burgerOpen} ref={burgerRef}>
                 <span /><span /><span />
               </button>
             </div>
@@ -453,28 +490,26 @@ export default function ShaneHairstudio() {
 
           <header className="shane-hero" id="home">
             <div className="shane-hero-inner">
-              <h1 className="shane-hero-title">藝流造型 Hair Studio</h1>
-              <p className="shane-hero-sub">專業剪髮 · 染髮 · 燙髮 · 造型</p>
-              <p className="shane-hero-lead">專屬設計 × 型格風格 × 頂級服務</p>
-              <p className="shane-hero-desc">
-                坐落於里斯本 Anjos 區，為您帶來亞洲美髮專業與細緻服務。我們注重每位顧客的風格與日常打理，讓您在異鄉也能擁有熟悉的好髮型。
-              </p>
+              <h1 className="shane-hero-title">{t.heroTitle}</h1>
+              <p className="shane-hero-sub">{t.heroSub}</p>
+              <p className="shane-hero-lead">{t.heroLead}</p>
+              <p className="shane-hero-desc">{t.heroDesc}</p>
               <div className="shane-hero-btns">
-                <a className="shane-btn-solid" href="#contact">立即預約</a>
-                <a className="shane-btn-outline" href="#gallery">查看作品</a>
+                <a className="shane-btn-solid" href="#contact">{t.heroBook}</a>
+                <a className="shane-btn-outline" href="#gallery">{t.heroGallery}</a>
               </div>
               <div className="shane-hero-features">
                 <div className="shane-hero-feat">
                   <span className="shane-hero-feat-icon">👥</span>
-                  <span>專業團隊</span>
+                  <span>{t.heroFeat1}</span>
                 </div>
                 <div className="shane-hero-feat">
                   <span className="shane-hero-feat-icon">✦</span>
-                  <span>個性化設計</span>
+                  <span>{t.heroFeat2}</span>
                 </div>
                 <div className="shane-hero-feat">
                   <span className="shane-hero-feat-icon">◇</span>
-                  <span>高端呵護</span>
+                  <span>{t.heroFeat3}</span>
                 </div>
               </div>
             </div>
@@ -482,7 +517,7 @@ export default function ShaneHairstudio() {
               <div className="shane-hero-photoGrad" aria-hidden />
               <div className="shane-hero-pin">
                 <span aria-hidden>📍</span>
-                <span>Anjos, Lisboa, Portugal</span>
+                <span>{t.heroPin}</span>
               </div>
             </div>
           </header>
@@ -490,8 +525,8 @@ export default function ShaneHairstudio() {
           <section className="shane-sec" id="services">
             <div className="shane-inner">
               <div className="shane-sec-head">
-                <h2>服務項目</h2>
-                <p className="en">— SERVICES —</p>
+                <h2>{t.secServices}</h2>
+                <p className="en">{t.secServicesSub}</p>
               </div>
               <div className="shane-svc-grid">
                 {services.map((s) => (
@@ -499,7 +534,7 @@ export default function ShaneHairstudio() {
                     <div className="shane-hex" aria-hidden>{s.icon}</div>
                     <h3>{s.title}</h3>
                     <p>{s.desc}</p>
-                    <a className="shane-svc-more" href={s.href}>了解更多 &gt;</a>
+                    <a className="shane-svc-more" href={s.href}>{t.svcMore} &gt;</a>
                   </div>
                 ))}
               </div>
@@ -510,19 +545,16 @@ export default function ShaneHairstudio() {
             <div className="shane-inner">
               <div className="shane-about-grid">
                 <div className="shane-about-img">
-                  <img src={ABOUT_IMG} alt="藝流造型 Hair Studio 設計師於門店前合影" loading="lazy" />
+                  <img src={ABOUT_IMG} alt={t.aboutImgAlt} loading="lazy" />
                 </div>
                 <div className="shane-about-text">
-                  <h2>關於 藝流造型 Hair Studio</h2>
-                  <p>
-                    藝流造型專注於亞洲髮質與流行趨勢，由經驗豐富的設計師為您量身打造。我們位於里斯本 Anjos
-                    一帶，交通便利，環境舒適，讓您在輕鬆氛圍中享受剪、染、燙、護理與造型的一站式服務。
-                  </p>
+                  <h2>{t.aboutH2}</h2>
+                  <p>{t.aboutP}</p>
                   <div className="shane-stats">
-                    <div className="shane-stat"><strong>10+</strong>專業造型團隊</div>
-                    <div className="shane-stat"><strong>1000+</strong>滿意顧客</div>
-                    <div className="shane-stat"><strong>嚴選</strong>產品</div>
-                    <div className="shane-stat"><strong>舒適</strong>環境</div>
+                    <div className="shane-stat"><strong>10+</strong>{t.statTeam}</div>
+                    <div className="shane-stat"><strong>1000+</strong>{t.statClients}</div>
+                    <div className="shane-stat"><strong>{t.statProductsStrong}</strong>{t.statProducts}</div>
+                    <div className="shane-stat"><strong>{t.statComfortStrong}</strong>{t.statComfort}</div>
                   </div>
                 </div>
               </div>
@@ -532,16 +564,16 @@ export default function ShaneHairstudio() {
           <section className="shane-sec" id="gallery">
             <div className="shane-inner">
               <div className="shane-sec-head">
-                <h2>作品展示</h2>
-                <p className="en">— OUR WORKS —</p>
+                <h2>{t.secGallery}</h2>
+                <p className="en">{t.secGallerySub}</p>
               </div>
               <div className="shane-gal-grid">
                 {GALLERY_IMGS.map((src, i) => (
-                  <img key={src} src={src} alt={`作品 ${i + 1}`} loading="lazy" />
+                  <img key={src} src={src} alt={`${t.galleryWorkAlt} ${i + 1}`} loading="lazy" />
                 ))}
               </div>
               <div className="shane-gal-more">
-                <a href="#contact">查看更多作品</a>
+                <a href="#contact">{t.galleryMore}</a>
               </div>
             </div>
           </section>
@@ -550,33 +582,17 @@ export default function ShaneHairstudio() {
             <div className="shane-inner">
               <div className="shane-env-grid">
                 <div className="shane-env-block">
-                  <h3>專業團隊 · 貼心服務</h3>
-                  <p>
-                    我們相信溝通是美髮的第一步。設計師會依您的生活型態、整理習慣與喜好，給出最實在的建議，讓髮型好整理、耐看又顯氣質。
-                  </p>
-                  <img src={TEAM_IMG} alt="專業團隊：設計師專注為顧客服務" loading="lazy" />
+                  <h3>{t.envTeamH3}</h3>
+                  <p>{t.envTeamP}</p>
+                  <img src={TEAM_IMG} alt={t.envTeamImgAlt} loading="lazy" />
                 </div>
                 <div className="shane-env-block">
-                  <h3>精緻環境 · 品味體驗</h3>
-                  <p>
-                    門店空間以深色基調搭配溫暖燈光，讓您從進店到完成造型都能放鬆享受。每個角落都經過用心佈置，呈現沙龍級質感。
-                  </p>
+                  <h3>{t.envSpaceH3}</h3>
+                  <p>{t.envSpaceP}</p>
                   <div className="shane-env-imgs">
-                    <img
-                      src={ENV_IMG1}
-                      alt="沙龍空間裝飾：精緻面具與暖色燈光下的質感陳列"
-                      loading="lazy"
-                    />
-                    <img
-                      src={ENV_IMG2}
-                      alt="門店牆面展示：華麗面具與羽毛飾品營造藝術氛圍"
-                      loading="lazy"
-                    />
-                    <img
-                      src={ENV_IMG3}
-                      alt="休息區陳列：精選酒款與幾何鏡面裝飾的品味角落"
-                      loading="lazy"
-                    />
+                    <img src={ENV_IMG1} alt={t.envImg1Alt} loading="lazy" />
+                    <img src={ENV_IMG2} alt={t.envImg2Alt} loading="lazy" />
+                    <img src={ENV_IMG3} alt={t.envImg3Alt} loading="lazy" />
                   </div>
                 </div>
               </div>
@@ -586,26 +602,26 @@ export default function ShaneHairstudio() {
           <section className="shane-sec" id="contact">
             <div className="shane-inner">
               <div className="shane-sec-head">
-                <h2>聯絡我們</h2>
-                <p className="en">— VISIT US —</p>
+                <h2>{t.secContact}</h2>
+                <p className="en">{t.secContactSub}</p>
               </div>
               <div className="shane-contact-grid">
                 <div className="shane-contact-col">
-                  <h4>地址</h4>
+                  <h4>{t.addrLabel}</h4>
                   <p>
                     Rua dos Anjos 6A<br />
                     1150-191 Lisboa, Portugal
                   </p>
-                  <h4 style={{ marginTop: 20 }}>營業時間</h4>
+                  <h4 style={{ marginTop: 20 }}>{t.hoursLabel}</h4>
                   <p>
-                    週二至週六 11:00 – 20:00<br />
-                    週日 11:00 – 18:00<br />
-                    <span style={{ color: ORANGE }}>週一公休</span>
+                    {t.hoursTueSat}<br />
+                    {t.hoursSun}<br />
+                    <span style={{ color: ORANGE }}>{t.hoursClosed}</span>
                   </p>
                 </div>
                 <div className="shane-map">
                   <iframe
-                    title="藝流造型地圖"
+                    title={t.mapTitle}
                     src={MAPS_EMBED}
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
@@ -613,30 +629,30 @@ export default function ShaneHairstudio() {
                   />
                 </div>
                 <div className="shane-contact-col">
-                  <h4>立即預約</h4>
+                  <h4>{t.bookH4}</h4>
                   <p>
                     <a className="shane-btn-solid" href={MAPS_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', marginTop: 4 }}>
-                      Google 地圖導航
+                      {t.googleMaps}
                     </a>
                   </p>
-                  <h4 style={{ marginTop: 20 }}>聯絡方式</h4>
+                  <h4 style={{ marginTop: 20 }}>{t.contactH4}</h4>
                   <p>
-                    WhatsApp：{' '}
+                    {t.labelWhatsApp}{colon}
                     <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
                       {WHATSAPP_DISPLAY}
                     </a>
                   </p>
                   <p style={{ marginTop: 8 }}>
-                    Instagram：{' '}
+                    {t.labelInstagram}{colon}
                     <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
                       @{INSTAGRAM_HANDLE}
                     </a>
                   </p>
                   <div className="shane-social" style={{ marginTop: 16 }}>
-                    <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Instagram @shanehairstudio">
+                    <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label={t.ariaInstagram}>
                       IG
                     </a>
-                    <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" aria-label={`WhatsApp ${WHATSAPP_DISPLAY}`}>
+                    <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" aria-label={`${t.ariaWhatsApp} ${WHATSAPP_DISPLAY}`}>
                       WA
                     </a>
                   </div>
@@ -646,20 +662,20 @@ export default function ShaneHairstudio() {
           </section>
 
           <div className="shane-price-strip">
-            <p style={{ color: TEXT_MUTED, fontSize: '0.88rem', marginBottom: 8 }}>官方價目表（含剪髮、數碼燙、染髮）</p>
-            <a href="/shane/price-list.png" target="_blank" rel="noopener noreferrer">查看完整價目表圖片 →</a>
+            <p style={{ color: TEXT_MUTED, fontSize: '0.88rem', marginBottom: 8 }}>{t.priceIntro}</p>
+            <a href="/shane/price-list.png" target="_blank" rel="noopener noreferrer">{t.priceLink}</a>
           </div>
 
           <footer className="shane-foot">
             <div className="shane-foot-grid">
-              <div className="shane-foot-brand">藝流造型 Hair Studio</div>
+              <div className="shane-foot-brand">{t.footerBrand}</div>
               <div className="shane-foot-mid">
-                WhatsApp：{' '}
+                {t.labelWhatsApp}{colon}
                 <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" style={{ color: ORANGE }}>
                   {WHATSAPP_DISPLAY}
                 </a>
                 <br />
-                Instagram：{' '}
+                {t.labelInstagram}{colon}
                 <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" style={{ color: ORANGE }}>
                   @{INSTAGRAM_HANDLE}
                 </a>
@@ -667,17 +683,19 @@ export default function ShaneHairstudio() {
                 Rua dos Anjos 6A, 1150-191 Lisboa
               </div>
               <div style={{ justifySelf: 'end' }} className="shane-social">
-                <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Instagram @shanehairstudio">
+                <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label={t.ariaInstagram}>
                   IG
                 </a>
-                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" aria-label={`WhatsApp ${WHATSAPP_DISPLAY}`}>
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" aria-label={`${t.ariaWhatsApp} ${WHATSAPP_DISPLAY}`}>
                   WA
                 </a>
               </div>
             </div>
-            <p className="shane-foot-copy">© {new Date().getFullYear()} 藝流造型 Hair Studio. All Rights Reserved.</p>
+            <p className="shane-foot-copy">
+              {t.footerCopyright.replace('{{year}}', String(new Date().getFullYear()))}
+            </p>
           </footer>
-        </div>
+      </div>
       </div>
     </>
   );
