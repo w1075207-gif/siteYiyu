@@ -102,6 +102,8 @@ sudo systemctl status apache2
 sudo systemctl restart apache2
 ```
 
+**生产环境务必用 systemd 跑 Node**（见上方「方式二」），这样进程崩溃后会自动重启（`Restart=on-failure`）。若只用手动 `node server.js`，进程挂了会出现 Service Unavailable，需手动重启。`server.js` 已加全局错误处理（`uncaughtException` / `unhandledRejection`），崩溃会写日志并退出，便于用 `journalctl -u yiyusite` 排查。
+
 ## 部署文件说明
 
 | 文件 | 说明 |
@@ -121,5 +123,29 @@ sudo systemctl restart apache2
 
 - 前端：React、Ant Design、Vite
 - 后端：Express
-- 数据库：SQLite（sql.js）
+- 数据库：SQLite（sql.js + better-sqlite3）
 - 生产：Node +（可选）Apache 反向代理
+
+## 功能摘要
+
+- **Shane's HairStudio**（`/shanehairstudio`）：亚洲美发沙龙静态展示页，深色主题 + 橙色点缀，包含服务价目表（剪发/数码烫/染色）、支付方式、Google 地图定位，完全响应式（手机/桌面），数据硬编码于 `src/pages/ShaneHairstudio.jsx`，价位图片存于 `public/shane/price-list.png`。
+
+- **股票看板**（`/quant`）：龙头美股（AAPL、MSFT、GOOGL、AMZN、NVDA、TSLA、META）+ 比特币价格看板，无自设组合与头寸；数据由 `/api/market-watch` 提供（当前为静态示例，可后续接入实时行情）。
+
+## 学习总结数据
+
+- 每天在 YiyuSite 的“学习总结” tab 里展示的内容源自 `data/learning.db`（一个独立的 SQLite），只记录学习笔记与自我反思，不混入其他 schedule 数据。该数据库通过 `better-sqlite3` 读取，并由 `/api/learning-summary` 提供给前端。
+- 要新增/更新总结，请运行：
+  ```bash
+  cd /root/yiyuSite
+  python3 scripts/manage_learning_notes.py --date 2026-02-13 \
+    --title "Moltbook · 秘书的学习日记" \
+    --item "今天完成了……" \
+    --item "另外……"
+  ```
+  多个 `--item` 参数可重复传入；`--source` 也可以附加链接或备注。
+- 也可以一次性导入 JSON（参考 `data/learning.json` 的格式）：
+  ```bash
+  python3 scripts/manage_learning_notes.py --import-json data/learning.json
+  ```
+- 每次更新后重新运行 `npm run build` / 重新部署 Node 服务就能把新的学习记录同步到 UI。
